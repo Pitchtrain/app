@@ -4,6 +4,7 @@ import { readdir, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { getManifest } from "workbox-build";
 
+const BASE_PATH = process.env.BASE_PATH ?? "/";
 const clientBuildDirectory = resolve("build/client");
 const appShell = resolve(clientBuildDirectory, "index.html");
 const serviceWorkerPath = resolve(clientBuildDirectory, "sw.js");
@@ -32,7 +33,7 @@ const cacheRevision = createHash("sha256")
   .digest("hex")
   .slice(0, 16);
 
-await writeFile(serviceWorkerPath, buildServiceWorker(cacheRevision, manifestEntries));
+await writeFile(serviceWorkerPath, buildServiceWorker(BASE_PATH, cacheRevision, manifestEntries));
 
 for (const warning of warnings) {
   console.warn(warning);
@@ -51,12 +52,12 @@ async function removeGeneratedWorkboxFiles() {
   );
 }
 
-function buildServiceWorker(cacheRevision, manifestEntries) {
+function buildServiceWorker(basePath, cacheRevision, manifestEntries) {
   return `const CACHE_PREFIX = "pitchtrain-precache";
 const CACHE_NAME = \`\${CACHE_PREFIX}-${cacheRevision}\`;
-const APP_SHELL_URL = new URL("/index.html", self.location.origin).href;
+const APP_SHELL_URL = new URL("${basePath}index.html", self.location.origin).href;
 const PRECACHE_URLS = ${JSON.stringify(
-    manifestEntries.map((entry) => `/${entry.url}`),
+    manifestEntries.map((entry) => `${basePath}${entry.url}`),
     null,
     2,
   )}.map((url) => new URL(url, self.location.origin).href);

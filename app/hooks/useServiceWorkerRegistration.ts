@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-const SERVICE_WORKER_URL = "/sw.js";
-const SERVICE_WORKER_SCOPE = "/";
+const SERVICE_WORKER_URL = `${import.meta.env.BASE_URL}sw.js`;
+const SERVICE_WORKER_SCOPE = import.meta.env.BASE_URL;
 
 export function useServiceWorkerRegistration(): void {
   useEffect(() => {

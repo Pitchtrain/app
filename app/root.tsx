@@ -10,10 +10,10 @@ import {TooltipProvider} from "./components/ui/tooltip";
 import {useServiceWorkerRegistration} from "./hooks/useServiceWorkerRegistration";
 
 export const links: Route.LinksFunction = () => [
-    {rel: "icon", type: "image/svg+xml", href: "/icon.svg"},
-    {rel: "manifest", href: "/manifest.webmanifest"},
-    {rel: "apple-touch-icon", href: "/apple-touch-icon-180x180.png"},
-    {rel: "mask-icon", href: "/icon.svg", color: "#102033"},
+    {rel: "icon", type: "image/svg+xml", href: `${import.meta.env.BASE_URL}icon.svg`},
+    {rel: "manifest", href: `${import.meta.env.BASE_URL}manifest.webmanifest`},
+    {rel: "apple-touch-icon", href: `${import.meta.env.BASE_URL}apple-touch-icon-180x180.png`},
+    {rel: "mask-icon", href: `${import.meta.env.BASE_URL}icon.svg`, color: "#102033"},
 ];
 
 export function Layout({children}: { children: React.ReactNode }) {
