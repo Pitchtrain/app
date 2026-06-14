@@ -1,0 +1,428 @@
+{
+  "app": {
+    "name": "{{appName}}",
+    "tagline": "Voice pitch training app"
+  },
+  "common": {
+    "next": "Next",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "skip": "Skip tour",
+    "close": "Close",
+    "done": "Done",
+    "settings": "Settings",
+    "about": "About",
+    "privacy": "Privacy",
+    "imprint": "Imprint",
+    "show": "Show",
+    "hide": "Hide",
+    "stepXofY": "Step {{current}} of {{total}}",
+    "aboutApp": "About {{appName}}",
+    "language": "Language",
+    "english": "English",
+    "german": "Deutsch",
+    "backTo": "← Back to {{target}}"
+  },
+  "topBar": {
+    "title": "{{appName}}"
+  },
+  "onboarding": {
+    "language": {
+      "title": "Choose your language",
+      "body": "You can change this later in Settings."
+    },
+    "welcome": {
+      "title": "Welcome to {{appName}}",
+      "body": "A friendly, browser-based voice pitch training app for voice training. See your pitch in real time, set target ranges, and review recordings, right from your device.",
+      "tour": "Take a quick tour to get set up. It only takes a minute. ✨"
+    },
+    "notMedical": {
+      "title": "{{appName}} is not a medical tool",
+      "body1": "<0>{{appName}}</0> does <1>not</1> diagnose, treat, or replace professional voice therapy. Please use it alongside qualified instruction from a speech-language therapist or voice coach experienced in trans voice training.",
+      "body2": "Practicing without proper guidance can cause vocal strain or injury. 💛",
+      "checkbox": "I understand that {{appName}} is a practice aid, not medical advice, and I should work with a qualified voice professional."
+    },
+    "features": {
+      "title": "Here's what you can do",
+      "pitch": {
+        "title": "Real-time pitch detection",
+        "body": "Watch your pitch live on a scrolling timeline."
+      },
+      "ranges": {
+        "title": "Voice range targets",
+        "body": "Pick a preset range or define your own. See instantly whether you're in, above, or below it."
+      },
+      "recording": {
+        "title": "Recording & playback",
+        "body": "Record practice takes and review them with full pitch visualization."
+      },
+      "practice": {
+        "title": "Detail mode",
+        "body": "Built-in tongue twisters, add custom prompts, optional auto-advance and shuffle."
+      },
+      "journal": {
+        "title": "Session journal",
+        "body": "Save named sessions in your browser. Backup the whole journal as a ZIP."
+      },
+      "offline": {
+        "title": "Works offline",
+        "body": "Install {{appName}} to your home screen and use it everywhere. We'll show you how."
+      }
+    },
+    "range": {
+      "title": "🎯 Pick a starting range",
+      "intro": "These are target frequency ranges commonly used in voice training, not statements about identity. Pick whatever you'd like to practice toward. You can change it any time.",
+      "minHz": "Min Hz",
+      "maxHz": "Max Hz",
+      "later": "You can also change this later on in the Settings."
+    },
+    "privacy": {
+      "title": "Your data stays with you",
+      "items": {
+        "indexeddb": "🎵 Recordings and pitch samples live in your browser's IndexedDB (under <0>pitchtrain-journal</0>).",
+        "settings": "⚙️ Settings are stored in your browser's localStorage. Nothing leaves your device.",
+        "exports": "📦 Exports are ZIP files you download yourself. They're yours entirely.",
+        "hosting": "🌐 The app is hosted on GitHub Pages. GitHub itself may log basic request info (IP, browser); the maintainer doesn't see it.",
+        "noTracking": "🚫 No accounts, no analytics, no cookies, no tracking."
+      },
+      "footer": "See the full <0>privacy notice</0> and <1>imprint</1> for details."
+    },
+    "install": {
+      "title": "Install {{appName}} to your device",
+      "body": "Installing makes {{appName}} feel like an app and lets it work offline. It's optional. You can always use it in the browser tab.",
+      "button": "📲 Install {{appName}}",
+      "stepsAndroid": {
+        "0": "Open the browser menu (⋮ or ⋯)",
+        "1": "Tap \"Install app\" or \"Add to Home Screen\"",
+        "2": "Confirm to install"
+      },
+      "stepsIos": {
+        "0": "Tap the Share button (⬆️) at the bottom of Safari",
+        "1": "Scroll and tap \"Add to Home Screen\"",
+        "2": "Tap \"Add\" in the top-right"
+      },
+      "stepsAndroidGeneric": {
+        "0": "Open the browser menu",
+        "1": "Tap \"Install\" or \"Add to Home Screen\""
+      },
+      "stepsDesktopSafari": {
+        "0": "In Safari, choose File → \"Add to Dock\"",
+        "1": "Confirm to install"
+      },
+      "iosOtherBrowser": "ℹ️ On iPhone & iPad, only Safari can install web apps. Open this page in Safari, then come back to this step.",
+      "desktopFirefox": "🦊 Firefox on desktop doesn't support PWA install. Use Chrome or Edge to install, or just bookmark this page.",
+      "fallback": "🔗 Open step-by-step install guide for your device",
+      "unknown": "We couldn't detect your browser automatically. Use the install guide below for tailored steps."
+    },
+    "done": {
+      "title": "You're all set",
+      "body": "Have fun practicing. Be kind to your voice: short, regular sessions beat long, strained ones. 💛",
+      "revisit": "You can revisit this tour any time from the About page."
+    },
+    "openApp": "🎙️ Open {{appName}}"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Detection algorithm, chart view, and custom range.",
+    "defaultRanges": "Default ranges",
+    "selectedRange": "Selected range",
+    "algorithm": "Algorithm",
+    "timeWindow": "Time window",
+    "language": "Language",
+    "restartTour": "Restart welcome tour",
+    "clearData": "Clear data",
+    "clearDataAction": "Clear",
+    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)"
+  },
+  "ranges": {
+    "title": "Selected range",
+    "custom": "Custom",
+    "customRange": "Custom range",
+    "male": "Male",
+    "androgynous": "Androgynous",
+    "female": "Female",
+    "rangeBlurb": {
+      "female": "Higher target range",
+      "androgynous": "Middle target range",
+      "male": "Lower target range",
+      "custom": "Custom range"
+    }
+  },
+  "practice": {
+    "drawerTitle": "Detail mode sets",
+    "drawerDescription": "Create, edit, or import sets of prompts.",
+    "newSet": "New set",
+    "importTxt": "Import .txt",
+    "autoAdvanceInterval": "Auto-advance interval",
+    "decreaseSeconds": "Decrease seconds",
+    "increaseSeconds": "Increase seconds",
+    "previousPrompt": "Previous prompt",
+    "nextPrompt": "Next prompt",
+    "addSetToStart": "Add a set to start practicing.",
+    "pickSetToStart": "Pick a set to start practicing.",
+    "customize": "Customize",
+    "shuffle": "Shuffle",
+    "auto": "Auto",
+    "editSets": "Edit sets",
+    "toggleShuffle": "Toggle shuffle",
+    "toggleAutoAdvance": "Toggle auto-advance",
+    "toggleSet": "Toggle {{label}}",
+    "namePromptForNewSet": "Name for new practice set",
+    "deleteSetConfirm": "Delete set \"{{label}}\"?",
+    "deleteSet": "Delete {{label}}",
+    "delete": "Delete",
+    "editSet": "Edit {{label}}",
+    "setName": "Set name",
+    "itemsEditor": "Set items",
+    "noItemsFound": "{{name}}: no items found",
+    "couldNotReadFile": "{{name}}: could not read file",
+    "imported_one": "Imported {{count}} set",
+    "imported_other": "Imported {{count}} sets",
+    "importedFallback": "Imported",
+    "noSetsYet": "No sets yet. Add one or import a .txt file.",
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "default": "default",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "onePerLine": "One item per line",
+    "eachLineHint": "Each line becomes one prompt.",
+    "saveOnBlur": "Changes save when this box loses focus.",
+    "activeSheetTitle": "Sets",
+    "activeSheetDescription": "Choose active sets and set practice behavior.",
+    "activeSets": "Active sets",
+    "setsActive_one": "{{count}} set active",
+    "setsActive_other": "{{count}} sets active",
+    "noSetsCreate": "No sets yet. Create or import one below.",
+    "order": "Order",
+    "display": "Display",
+    "feedback": "Feedback",
+    "sentenceFeedback": "Display sentence feedback",
+    "autoAdvance": "Auto-advance",
+    "autoAdvanceNext": "Auto-advance next item",
+    "interval": "Interval"
+  },
+  "reading": {
+    "enter": "Reading mode",
+    "leave": "Leave reading mode",
+    "options": "Reading options",
+    "drawerTitle": "Reading texts",
+    "drawerDescription": "Choose personal texts or use the built-in library for teleprompter-style practice.",
+    "personal": "Personal",
+    "library": "Library",
+    "newText": "New text",
+    "namePromptForNewText": "Name this text",
+    "newTextTitle": "Untitled text",
+    "importTxt": "Import .txt",
+    "randomText": "Random text",
+    "importToPersonal": "Import",
+    "importToPersonalLabel": "Import {{title}} to Personal",
+    "importedToPersonal": "Imported \"{{title}}\" to Personal.",
+    "randomShown": "Showing \"{{title}}\".",
+    "libraryFilters": {
+      "all": "All",
+      "allTypes": "All types"
+    },
+    "libraryKinds": {
+      "dialog": "Dialog",
+      "text": "Text"
+    },
+    "libraryLocales": {
+      "en": "English",
+      "de": "German"
+    },
+    "activeText": "Active text",
+    "titleLabel": "Text title",
+    "bodyLabel": "Reading text",
+    "bodyPlaceholder": "Paste or write a longer text here.",
+    "deleteConfirm": "Delete text \"{{title}}\"?",
+    "deleteText": "Delete {{title}}",
+    "delete": "Delete",
+    "editText": "Edit {{title}}",
+    "selected": "Selected",
+    "words_one": "{{count}} word",
+    "words_other": "{{count}} words",
+    "noTextsYet": "No reading texts yet. Add one or import a .txt file.",
+    "noPersonalTextsYet": "No personal texts yet. Add one, import a .txt file, or copy something from Library.",
+    "noLibraryTextsYet": "No library texts are available.",
+    "noLibraryTextsForFilter": "No library texts match this language.",
+    "noTextFound": "{{name}}: no text found",
+    "couldNotReadFile": "{{name}}: could not read file",
+    "imported_one": "Imported {{count}} text",
+    "imported_other": "Imported {{count}} texts",
+    "noActiveTitle": "Reading mode",
+    "noActiveBody": "",
+    "emptyActiveText": "Add or import a reading text.",
+    "feedbackGoal": "Feedback goal",
+    "feedbackThreshold": "Threshold (Hz)",
+    "feedbackGoals": {
+      "auto": "Auto",
+      "both": "Both bounds",
+      "above": "Upper only",
+      "below": "Lower only"
+    }
+  },
+  "journal": {
+    "drawerTitle": "Journal",
+    "drawerDescription": "Saved sessions. Tap one to load it.",
+    "sessions": "Sessions ({{count}})",
+    "import": "Import",
+    "export": "Export",
+    "importJournal": "Import journal",
+    "exportJournal": "Export journal",
+    "noSessions": "No sessions yet. Record and save one.",
+    "rename": "Rename",
+    "downloadAudio": "Download audio",
+    "delete": "Delete",
+    "closeActions": "Close actions",
+    "sessionActions": "Session actions",
+    "saveDialogTitle": "Saved to journal",
+    "saveDialogDescription": "Session stored locally. Rename or download the audio.",
+    "sessionName": "Session name",
+    "defaultSessionName": "Session {{stamp}}",
+    "couldNotLoad": "Could not load journal.",
+    "couldNotSave": "Could not save session.",
+    "sessionNotFound": "Session not found.",
+    "couldNotLoadSession": "Could not load session.",
+    "couldNotRename": "Could not rename session.",
+    "couldNotDelete": "Could not delete session.",
+    "couldNotExport": "Could not export journal.",
+    "couldNotImport": "Could not import journal.",
+    "archiveEmpty": "Archive had no sessions.",
+    "importedSessions_one": "Imported {{count}} session.",
+    "importedSessions_other": "Imported {{count}} sessions.",
+    "tab": "Journal",
+    "clearAll": "Clear all",
+    "clearAllConfirm": "Delete all {{count}} sessions? This cannot be undone.",
+    "cleared": "Journal cleared.",
+    "couldNotClearAll": "Could not clear journal.",
+    "tags": "Tags",
+    "editTags": "Edit tags",
+    "noTags": "No tags yet.",
+    "newTagPlaceholder": "New tag",
+    "createTag": "Create tag",
+    "selectTagColor": "Select tag color",
+    "allTags": "All",
+    "noTaggedSessions": "No sessions with this tag.",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "couldNotSaveTag": "Could not save tag.",
+    "couldNotSaveTags": "Could not save tags."
+  },
+  "recording": {
+    "record": "Record",
+    "pause": "Pause",
+    "continue": "Continue",
+    "stop": "Stop",
+    "recBadge": "REC",
+    "pauseBadge": "PAUSE",
+    "dismiss": "Dismiss recording",
+    "confirmDiscard": "Discard recording",
+    "play": "Play",
+    "playPause": "Pause",
+    "saveToJournal": "Save to journal",
+    "noMicSupport": "Your browser does not support microphone capture.",
+    "noWebAudio": "Your browser does not support the Web Audio API.",
+    "micBlocked": "Microphone access was blocked.",
+    "tapToBegin": "Tap record to begin"
+  },
+  "metrics": {
+    "pitch": "Pitch",
+    "median": "Median",
+    "span": "Span"
+  },
+  "status": {
+    "ready": "Ready",
+    "recording": "Recording",
+    "paused": "Paused",
+    "review": "Review"
+  },
+  "chart": {
+    "full": "Full",
+    "detail": "Detail"
+  },
+  "sidebar": {
+    "practice": "Detail",
+    "range": "Selected range",
+    "setup": "Setup",
+    "sets": "Sets",
+    "reading": "Reading",
+    "journal": "Journal",
+    "advanced": "Advanced settings",
+    "collapse": "Collapse sidebar"
+  },
+  "routes": {
+    "home": {
+      "title": "{{appName}}",
+      "description": "Voice pitch training app"
+    },
+    "welcome": {
+      "title": "Welcome · {{appName}}",
+      "description": "Quick tour of {{appName}}."
+    },
+    "about": {
+      "title": "About · {{appName}}",
+      "description": "About {{appName}} and key information.",
+      "backToApp": "← Back to {{appName}}",
+      "heading": "🎙️ About {{appName}}",
+      "intro": "{{appName}} is an open-source, browser-based voice pitch training app for voice training. It runs entirely in your browser: no account, no server, no tracking.",
+      "notMedicalTitle": "Not a medical tool",
+      "notMedicalBody": "{{appName}} does not diagnose, treat, or replace professional voice therapy. Please use it alongside qualified instruction from a speech-language therapist or voice coach experienced in trans voice training. Practicing without proper guidance can cause vocal strain or injury.",
+      "featuresTitle": "Main features",
+      "feature1": "📊 Real-time pitch detection (Macleod, YIN, AMDF)",
+      "feature2": "🎯 Preset & custom voice range targets",
+      "feature3": "🔴 Recording with playback and pitch scrub",
+      "feature4": "🗣️ Detail mode with auto-advance and shuffle",
+      "feature5": "📓 Local journal with ZIP import/export",
+      "feature6": "📱 Installable as a Progressive Web App",
+      "dataTitle": "Where your data lives",
+      "dataItem1": "Recordings & pitch samples in IndexedDB (<0>pitchtrain-journal</0>).",
+      "dataItem2": "Settings in localStorage (<0>pitchtrain:range-settings</0>, <1>pitchtrain:practice-settings</1>, <2>pitchtrain:onboarding-completed</2>).",
+      "dataItem3": "Microphone audio is processed in your browser only.",
+      "dataItem4": "The site is hosted on GitHub Pages.",
+      "seePrivacy": "See the full <0>privacy notice</0> and <1>imprint</1>.",
+      "restartTitle": "Restart the welcome tour",
+      "restartBody": "Want to walk through the intro again?",
+      "sourceOnGitHub": "Source on GitHub"
+    },
+    "imprint": {
+      "title": "Imprint · {{appName}}",
+      "description": "Imprint for {{appName}}.",
+      "backToAbout": "← Back to About",
+      "heading": "Imprint",
+      "intro": "{{appName}} is a non-commercial, open-source project. It does not serve commercial content, does not run ads, and does not collect or transmit user data.",
+      "maintainer": "Maintainer",
+      "contact": "Contact",
+      "sourceCode": "Source code",
+      "hosting": "Hosting",
+      "hostingValue": "GitHub Pages (GitHub, Inc., 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, USA)",
+      "responsible": "Responsible for content: see Maintainer above.",
+      "seeAlso": "See also the <0>privacy notice</0>."
+    },
+    "privacy": {
+      "title": "Privacy · {{appName}}",
+      "description": "Privacy notice for {{appName}}.",
+      "heading": "Privacy notice",
+      "lastUpdated": "Last updated: {{date}}",
+      "section1Title": "1. What this app collects",
+      "section1Body": "Nothing. {{appName}} has no backend, no analytics, no cookies, and no user accounts. The maintainer receives no data about you. The hosting provider (GitHub Pages) may log basic request data (see section 3).",
+      "section2Title": "2. What stays on your device",
+      "section2Item1": "<0>IndexedDB</0>: recordings and pitch samples under the database key <1>pitchtrain-journal</1>.",
+      "section2Item2": "<0>localStorage</0>: keys <1>pitchtrain:range-settings</1>, <2>pitchtrain:practice-settings</2>, and <3>pitchtrain:onboarding-completed</3>.",
+      "section2Item3": "<0>Microphone audio</0>: processed in your browser only. It never leaves your device unless you choose to export it.",
+      "section3Title": "3. Third parties",
+      "section3Body1": "<0>GitHub Pages</0> hosts the static site. When your browser fetches the page, GitHub may log your IP address, user-agent, and request URL according to GitHub's privacy statement: <1>GitHub General Privacy Statement</1>. The maintainer of {{appName}} has no access to those logs.",
+      "section3Body2": "<0>installpwa.com</0>: only loaded if you click the install help link during the welcome tour. Their own privacy policy applies if you visit their site.",
+      "section4Title": "4. Microphone permission",
+      "section4Body": "{{appName}} requests microphone access to detect pitch in real time. Audio is analyzed in your browser only and is not transmitted anywhere. Recordings you choose to save are stored locally in IndexedDB.",
+      "section5Title": "5. Your rights (GDPR Art. 15–22)",
+      "section5Body1": "Because the maintainer holds no personal data about you, requests for access, correction, or deletion cannot be fulfilled by us: we simply have nothing on file. To remove all local {{appName}} data: clear your browser's site data for this domain, or uninstall the PWA.",
+      "section5Body2": "For requests concerning the hosting provider's logs, please refer to GitHub's privacy statement linked above.",
+      "section6Title": "6. Contact",
+      "section6Body": "See the <0>imprint</0> for contact information.",
+      "section7Title": "7. Changes",
+      "section7Body": "This notice may be updated. The \"last updated\" date above reflects the most recent change."
+    }
+  }
+}

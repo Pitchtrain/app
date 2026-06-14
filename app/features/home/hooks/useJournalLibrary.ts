@@ -1,0 +1,310 @@
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import type { TFunction } from "i18next";
+import type { JournalTag, RecordingSession, SavedSession } from "~/types";
+import {
+  bulkPut,
+  bulkPutTags,
+  clearSessions,
+  deleteSession,
+  getSession,
+  listSessions,
+  listTags,
+  putSession,
+  putTag,
+} from "~/journal/db";
+import {
+  exportJournal,
+  extensionForMimeType,
+  importJournal,
+} from "~/journal/zip";
+import {
+  createJournalTag,
+  READING_SESSION_TAG_COLOR,
+  READING_SESSION_TAG_LABEL,
+} from "~/journal/tags";
+import { buildSessionStamp } from "../sessionStamp";
+
+type Args = {
+  t: TFunction;
+  recordingSession: RecordingSession | null;
+  activeSessionId: string | null;
+  setActiveSessionId: (id: string | null) => void;
+  loadSavedSession: (session: SavedSession) => void;
+};
+
+export function useJournalLibrary({
+  t,
+  recordingSession,
+  activeSessionId,
+  setActiveSessionId,
+  loadSavedSession,
+}: Args) {
+  const [journalSessions, setJournalSessions] = useState<SavedSession[]>([]);
+  const [journalTags, setJournalTags] = useState<JournalTag[]>([]);
+  const [journalDrawerOpen, setJournalDrawerOpen] = useState(false);
+  const [saveDialogSession, setSaveDialogSession] =
+    useState<SavedSession | null>(null);
+  const [activeJournalTagId, setActiveJournalTagId] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    void Promise.all([listSessions(), listTags()])
+      .then(([sessions, tags]) => {
+        if (!cancelled) {
+          setJournalSessions(sessions);
+          setJournalTags(tags);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error(t("journal.couldNotLoad"));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [t]);
+
+  async function ensureReadingSessionTag() {
+    const existing = journalTags.find(
+      (tag) => tag.label.trim() === READING_SESSION_TAG_LABEL,
+    );
+    if (existing) return existing;
+
+    const tag = createJournalTag(
+      READING_SESSION_TAG_LABEL,
+      READING_SESSION_TAG_COLOR,
+    );
+    await putTag(tag);
+    setJournalTags((prev) =>
+      prev.some((item) => item.label.trim() === READING_SESSION_TAG_LABEL)
+        ? prev
+        : [...prev, tag],
+    );
+    return tag;
+  }
+
+  async function handleSave() {
+    if (!recordingSession) return;
+    const id =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    const defaultName = t("journal.defaultSessionName", {
+      stamp: buildSessionStamp(recordingSession.createdAt),
+    });
+    try {
+      const tagIds = recordingSession.readingMode
+        ? [(await ensureReadingSessionTag()).id]
+        : [];
+      const saved: SavedSession = {
+        id,
+        name: defaultName,
+        createdAt: recordingSession.createdAt,
+        durationMs: recordingSession.durationMs,
+        audioBlob: recordingSession.audioBlob,
+        audioMimeType: recordingSession.audioBlob.type || "audio/webm",
+        samples: recordingSession.samples,
+        rangeSnapshot: recordingSession.rangeSnapshot,
+        tagIds,
+      };
+      await putSession(saved);
+      setJournalSessions((prev) => [saved, ...prev]);
+      setSaveDialogSession(saved);
+      setActiveSessionId(saved.id);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotSave"));
+    }
+  }
+
+  function handleCreateJournalTag(label: string, color: string) {
+    const existing = journalTags.find(
+      (tag) => tag.label.trim().toLowerCase() === label.trim().toLowerCase(),
+    );
+    if (existing) return existing;
+
+    const tag = createJournalTag(label.trim(), color);
+    setJournalTags((prev) => [...prev, tag]);
+    void putTag(tag).catch((error) => {
+      console.error(error);
+      setJournalTags((prev) => prev.filter((item) => item.id !== tag.id));
+      toast.error(t("journal.couldNotSaveTag"));
+    });
+    return tag;
+  }
+
+  async function handleSessionTagChange(id: string, tagIds: string[]) {
+    const existing = journalSessions.find((s) => s.id === id);
+    if (!existing) return;
+    const uniqueTagIds = [...new Set(tagIds)];
+    const updated: SavedSession = { ...existing, tagIds: uniqueTagIds };
+    setJournalSessions((prev) => prev.map((s) => (s.id === id ? updated : s)));
+    setSaveDialogSession((current) =>
+      current && current.id === id ? updated : current,
+    );
+    try {
+      await putSession(updated);
+    } catch (error) {
+      console.error(error);
+      setJournalSessions((prev) =>
+        prev.map((s) => (s.id === id ? existing : s)),
+      );
+      setSaveDialogSession((current) =>
+        current && current.id === id ? existing : current,
+      );
+      toast.error(t("journal.couldNotSaveTags"));
+    }
+  }
+
+  async function handleLoadSession(id: string) {
+    try {
+      const saved = await getSession(id);
+      if (!saved) {
+        toast.error(t("journal.sessionNotFound"));
+        return;
+      }
+      loadSavedSession(saved);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotLoadSession"));
+    }
+  }
+
+  async function handleRenameSession(id: string, name: string) {
+    const existing = journalSessions.find((s) => s.id === id);
+    if (!existing) return;
+    const updated: SavedSession = { ...existing, name };
+    try {
+      await putSession(updated);
+      setJournalSessions((prev) =>
+        prev.map((s) => (s.id === id ? updated : s)),
+      );
+      setSaveDialogSession((current) =>
+        current && current.id === id ? updated : current,
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotRename"));
+    }
+  }
+
+  async function handleDeleteSession(id: string) {
+    try {
+      await deleteSession(id);
+      setJournalSessions((prev) => prev.filter((s) => s.id !== id));
+      setActiveSessionId(activeSessionId === id ? null : activeSessionId);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotDelete"));
+    }
+  }
+
+  async function handleDownloadSessionById(id: string) {
+    const existing = journalSessions.find((s) => s.id === id);
+    if (existing) {
+      downloadSession(existing);
+      return;
+    }
+    const fetched = await getSession(id);
+    if (fetched) downloadSession(fetched);
+  }
+
+  async function handleExportJournal() {
+    if (journalSessions.length === 0) return;
+    try {
+      const blob = await exportJournal(journalSessions, journalTags);
+      const url = URL.createObjectURL(blob);
+      const stamp = new Date().toISOString().slice(0, 10);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `pitchtrain-journal-${stamp}.zip`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotExport"));
+    }
+  }
+
+  async function handleImportJournal(file: File) {
+    try {
+      const imported = await importJournal(file);
+      if (imported.sessions.length === 0) {
+        toast.info(t("journal.archiveEmpty"));
+        return;
+      }
+      await bulkPutTags(imported.tags);
+      await bulkPut(imported.sessions);
+      const [mergedSessions, mergedTags] = await Promise.all([
+        listSessions(),
+        listTags(),
+      ]);
+      setJournalSessions(mergedSessions);
+      setJournalTags(mergedTags);
+      toast.success(
+        t("journal.importedSessions", { count: imported.sessions.length }),
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotImport"));
+    }
+  }
+
+  async function handleClearAllSessions() {
+    if (
+      !window.confirm(
+        t("journal.clearAllConfirm", { count: journalSessions.length }),
+      )
+    ) {
+      return;
+    }
+    try {
+      await clearSessions();
+      setJournalSessions([]);
+      setActiveSessionId(null);
+      toast.success(t("journal.cleared"));
+    } catch (error) {
+      console.error(error);
+      toast.error(t("journal.couldNotClearAll"));
+    }
+  }
+
+  return {
+    journalSessions,
+    journalTags,
+    journalDrawerOpen,
+    setJournalDrawerOpen,
+    saveDialogSession,
+    setSaveDialogSession,
+    activeJournalTagId,
+    setActiveJournalTagId,
+    handleSave,
+    handleCreateJournalTag,
+    handleSessionTagChange,
+    handleLoadSession,
+    handleRenameSession,
+    handleDeleteSession,
+    handleDownloadSessionById,
+    handleExportJournal,
+    handleImportJournal,
+    handleClearAllSessions,
+  };
+}
+
+function downloadSession(session: SavedSession) {
+  const extension = extensionForMimeType(session.audioMimeType);
+  const url = URL.createObjectURL(session.audioBlob);
+  const safeName = session.name.replace(/[^a-z0-9\-_.]+/gi, "_") || "session";
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${safeName}.${extension}`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+}

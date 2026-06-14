@@ -1,0 +1,428 @@
+{
+  "app": {
+    "name": "{{appName}}",
+    "tagline": "Stimmlagen-Training-App"
+  },
+  "common": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "skip": "Tour überspringen",
+    "close": "Schließen",
+    "done": "Fertig",
+    "settings": "Einstellungen",
+    "about": "Über",
+    "privacy": "Datenschutz",
+    "imprint": "Impressum",
+    "show": "Anzeigen",
+    "hide": "Ausblenden",
+    "stepXofY": "Schritt {{current}} von {{total}}",
+    "aboutApp": "Über {{appName}}",
+    "language": "Sprache",
+    "english": "English",
+    "german": "Deutsch",
+    "backTo": "← Zurück zu {{target}}"
+  },
+  "topBar": {
+    "title": "{{appName}}"
+  },
+  "onboarding": {
+    "language": {
+      "title": "Sprache wählen",
+      "body": "Du kannst dies später in den Einstellungen ändern."
+    },
+    "welcome": {
+      "title": "Willkommen bei {{appName}}",
+      "body": "Eine freundliche, browserbasierte Stimmlagen-Training-App für das Stimmtraining. Sieh deine Tonhöhe in Echtzeit, lege Zielbereiche fest und höre dir Aufnahmen an, direkt auf deinem Gerät.",
+      "tour": "Mach eine kurze Tour zum Einrichten. Dauert nur eine Minute. ✨"
+    },
+    "notMedical": {
+      "title": "{{appName}} ist kein medizinisches Tool",
+      "body1": "<0>{{appName}}</0> diagnostiziert, behandelt oder ersetzt <1>keine</1> professionelle Stimmtherapie. Bitte nutze es ergänzend zu qualifizierter Anleitung durch eine Logopädin/einen Logopäden oder einen Stimm-Coach mit Erfahrung im Trans-Stimmtraining.",
+      "body2": "Üben ohne fachkundige Anleitung kann zu Stimmüberlastung oder Verletzungen führen. 💛",
+      "checkbox": "Mir ist klar, dass {{appName}} ein Übungstool und kein medizinischer Rat ist und ich mit einer qualifizierten Stimmfachperson arbeiten sollte."
+    },
+    "features": {
+      "title": "Das kannst du tun",
+      "pitch": {
+        "title": "Tonhöhe in Echtzeit",
+        "body": "Verfolge deine Tonhöhe live auf einer scrollenden Zeitachse."
+      },
+      "ranges": {
+        "title": "Stimmbereich-Ziele",
+        "body": "Wähle einen Voreinstellung oder definiere deinen eigenen. Sieh sofort, ob du im, über oder unter dem Bereich liegst."
+      },
+      "recording": {
+        "title": "Aufnahme & Wiedergabe",
+        "body": "Nimm Übungen auf und höre sie mit voller Tonhöhen-Visualisierung an."
+      },
+      "practice": {
+        "title": "Detailmodus",
+        "body": "Eingebaute Zungenbrecher, eigene Texte hinzufügen, optional automatisches Weiterschalten und Mischen."
+      },
+      "journal": {
+        "title": "Tagebuch",
+        "body": "Speichere benannte Sitzungen im Browser. Sichere das ganze Tagebuch als ZIP."
+      },
+      "offline": {
+        "title": "Funktioniert offline",
+        "body": "Installiere {{appName}} auf deinem Startbildschirm und nutze es überall. Wir zeigen dir wie."
+      }
+    },
+    "range": {
+      "title": "🎯 Startbereich wählen",
+      "intro": "Dies sind Frequenzbereiche, die im Stimmtraining üblich sind, keine Aussage über Identität. Wähle, worauf du üben möchtest. Du kannst es jederzeit ändern.",
+      "minHz": "Min Hz",
+      "maxHz": "Max Hz",
+      "later": "Du kannst dies auch später in den Einstellungen ändern."
+    },
+    "privacy": {
+      "title": "Deine Daten bleiben bei dir",
+      "items": {
+        "indexeddb": "🎵 Aufnahmen und Tonhöhen-Daten liegen in der IndexedDB deines Browsers (unter <0>pitchtrain-journal</0>).",
+        "settings": "⚙️ Einstellungen liegen im localStorage des Browsers. Nichts verlässt dein Gerät.",
+        "exports": "📦 Exporte sind ZIP-Dateien, die du selbst herunterlädst. Sie gehören dir.",
+        "hosting": "🌐 Die App läuft auf GitHub Pages. GitHub kann Basis-Anfragedaten loggen (IP, Browser); der Betreuer sieht das nicht.",
+        "noTracking": "🚫 Keine Konten, kein Tracking, keine Cookies, keine Analytik."
+      },
+      "footer": "Siehe vollständiger <0>Datenschutzhinweis</0> und <1>Impressum</1> für Details."
+    },
+    "install": {
+      "title": "{{appName}} auf deinem Gerät installieren",
+      "body": "Die Installation lässt {{appName}} wie eine App wirken und ermöglicht Offline-Betrieb. Optional, du kannst sie auch im Browser-Tab nutzen.",
+      "button": "📲 {{appName}} installieren",
+      "stepsAndroid": {
+        "0": "Öffne das Browser-Menü (⋮ oder ⋯)",
+        "1": "Tippe auf „App installieren\" oder „Zum Startbildschirm hinzufügen\"",
+        "2": "Bestätige die Installation"
+      },
+      "stepsIos": {
+        "0": "Tippe in Safari unten auf den Teilen-Button (⬆️)",
+        "1": "Scroll und tippe auf „Zum Home-Bildschirm\"",
+        "2": "Tippe oben rechts auf „Hinzufügen\""
+      },
+      "stepsAndroidGeneric": {
+        "0": "Öffne das Browser-Menü",
+        "1": "Tippe auf „Installieren\" oder „Zum Startbildschirm hinzufügen\""
+      },
+      "stepsDesktopSafari": {
+        "0": "In Safari: Datei → „Zum Dock hinzufügen\"",
+        "1": "Bestätige die Installation"
+      },
+      "iosOtherBrowser": "ℹ️ Auf iPhone & iPad kann nur Safari Web-Apps installieren. Öffne diese Seite in Safari und kehre zu diesem Schritt zurück.",
+      "desktopFirefox": "🦊 Firefox am Desktop unterstützt keine PWA-Installation. Nutze Chrome oder Edge, oder leg einfach ein Lesezeichen an.",
+      "fallback": "🔗 Schritt-für-Schritt-Installationsanleitung für dein Gerät öffnen",
+      "unknown": "Wir konnten deinen Browser nicht automatisch erkennen. Nutze die Anleitung unten."
+    },
+    "done": {
+      "title": "Alles eingerichtet",
+      "body": "Viel Spaß beim Üben. Sei sanft zu deiner Stimme: kurze regelmäßige Sitzungen sind besser als lange, angestrengte. 💛",
+      "revisit": "Du kannst die Tour jederzeit auf der Über-Seite erneut starten."
+    },
+    "openApp": "🎙️ {{appName}} öffnen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Erkennungsalgorithmus, Diagrammansicht und eigener Bereich.",
+    "defaultRanges": "Standardbereiche",
+    "selectedRange": "Bereich",
+    "algorithm": "Algorithmus",
+    "timeWindow": "Zeitfenster",
+    "language": "Sprache",
+    "restartTour": "Tour neu starten",
+    "clearData": "Daten löschen",
+    "clearDataAction": "Löschen",
+    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)"
+  },
+  "ranges": {
+    "title": "Gewählte Stimmlage",
+    "custom": "Eigen",
+    "customRange": "Eigener Bereich",
+    "male": "Männlich",
+    "androgynous": "Androgyn",
+    "female": "Weiblich",
+    "rangeBlurb": {
+      "female": "Höherer Zielbereich",
+      "androgynous": "Mittlerer Zielbereich",
+      "male": "Tieferer Zielbereich",
+      "custom": "Eigener Bereich"
+    }
+  },
+  "practice": {
+    "drawerTitle": "Detailmodus-Sets",
+    "drawerDescription": "Sets von Texten erstellen, bearbeiten oder importieren.",
+    "newSet": "Neues Set",
+    "importTxt": ".txt importieren",
+    "autoAdvanceInterval": "Auto-Intervall",
+    "decreaseSeconds": "Sekunden verringern",
+    "increaseSeconds": "Sekunden erhöhen",
+    "previousPrompt": "Vorheriger Text",
+    "nextPrompt": "Nächster Text",
+    "addSetToStart": "Füge ein Set hinzu, um zu üben.",
+    "pickSetToStart": "Wähle ein Set, um zu üben.",
+    "customize": "Anpassen",
+    "shuffle": "Mischen",
+    "auto": "Auto",
+    "editSets": "Sets bearbeiten",
+    "toggleShuffle": "Mischen umschalten",
+    "toggleAutoAdvance": "Auto-Weiter umschalten",
+    "toggleSet": "{{label}} umschalten",
+    "namePromptForNewSet": "Name für neues Übungsset",
+    "deleteSetConfirm": "Set „{{label}}\" löschen?",
+    "deleteSet": "{{label}} löschen",
+    "delete": "Löschen",
+    "editSet": "{{label}} bearbeiten",
+    "setName": "Set-Name",
+    "itemsEditor": "Set-Einträge",
+    "noItemsFound": "{{name}}: keine Einträge gefunden",
+    "couldNotReadFile": "{{name}}: Datei konnte nicht gelesen werden",
+    "imported_one": "{{count}} Set importiert",
+    "imported_other": "{{count}} Sets importiert",
+    "importedFallback": "Importiert",
+    "noSetsYet": "Noch keine Sets. Füge eines hinzu oder importiere eine .txt-Datei.",
+    "items_one": "{{count}} Eintrag",
+    "items_other": "{{count}} Einträge",
+    "default": "Standard",
+    "expand": "Aufklappen",
+    "collapse": "Zuklappen",
+    "onePerLine": "Ein Eintrag pro Zeile",
+    "eachLineHint": "Jede Zeile wird ein Text.",
+    "saveOnBlur": "Wird gespeichert, sobald das Feld den Fokus verliert.",
+    "activeSheetTitle": "Sets",
+    "activeSheetDescription": "Wähle aktive Sets und das Verhalten beim Üben.",
+    "activeSets": "Aktive Sets",
+    "setsActive_one": "{{count}} Set aktiv",
+    "setsActive_other": "{{count}} Sets aktiv",
+    "noSetsCreate": "Noch keine Sets. Erstelle oder importiere eines.",
+    "order": "Reihenfolge",
+    "display": "Anzeige",
+    "feedback": "Feedback",
+    "sentenceFeedback": "Satz-Feedback anzeigen",
+    "autoAdvance": "Auto-Weiter",
+    "autoAdvanceNext": "Automatisch zum nächsten Text",
+    "interval": "Intervall"
+  },
+  "reading": {
+    "enter": "Lesemodus",
+    "leave": "Lesemodus verlassen",
+    "options": "Leseoptionen",
+    "drawerTitle": "Lesetexte",
+    "drawerDescription": "Wähle eigene Texte oder nutze die eingebaute Bibliothek für teleprompterartiges Üben.",
+    "personal": "Persönlich",
+    "library": "Bibliothek",
+    "newText": "Neuer Text",
+    "namePromptForNewText": "Name für diesen Text",
+    "newTextTitle": "Unbenannter Text",
+    "importTxt": ".txt importieren",
+    "randomText": "Zufälliger Text",
+    "importToPersonal": "Importieren",
+    "importToPersonalLabel": "{{title}} nach Persönlich importieren",
+    "importedToPersonal": "\"{{title}}\" nach Persönlich importiert.",
+    "randomShown": "\"{{title}}\" wird angezeigt.",
+    "libraryFilters": {
+      "all": "Alle",
+      "allTypes": "Alle Typen"
+    },
+    "libraryKinds": {
+      "dialog": "Dialog",
+      "text": "Text"
+    },
+    "libraryLocales": {
+      "en": "Englisch",
+      "de": "Deutsch"
+    },
+    "activeText": "Aktiver Text",
+    "titleLabel": "Texttitel",
+    "bodyLabel": "Lesetext",
+    "bodyPlaceholder": "Füge hier einen längeren Text ein oder schreibe ihn.",
+    "deleteConfirm": "Text „{{title}}\" löschen?",
+    "deleteText": "{{title}} löschen",
+    "delete": "Löschen",
+    "editText": "{{title}} bearbeiten",
+    "selected": "Ausgewählt",
+    "words_one": "{{count}} Wort",
+    "words_other": "{{count}} Wörter",
+    "noTextsYet": "Noch keine Lesetexte. Füge einen hinzu oder importiere eine .txt-Datei.",
+    "noPersonalTextsYet": "Noch keine persönlichen Texte. Füge einen hinzu, importiere eine .txt-Datei oder kopiere etwas aus der Bibliothek.",
+    "noLibraryTextsYet": "Keine Bibliothekstexte verfügbar.",
+    "noLibraryTextsForFilter": "Keine Bibliothekstexte für diese Sprache.",
+    "noTextFound": "{{name}}: kein Text gefunden",
+    "couldNotReadFile": "{{name}}: Datei konnte nicht gelesen werden",
+    "imported_one": "{{count}} Text importiert",
+    "imported_other": "{{count}} Texte importiert",
+    "noActiveTitle": "Lesemodus",
+    "noActiveBody": "",
+    "emptyActiveText": "Füge einen Lesetext hinzu oder importiere einen.",
+    "feedbackGoal": "Feedback-Ziel",
+    "feedbackThreshold": "Schwelle (Hz)",
+    "feedbackGoals": {
+      "auto": "Automatisch",
+      "both": "Beide Grenzen",
+      "above": "Nur obere Grenze",
+      "below": "Nur untere Grenze"
+    }
+  },
+  "journal": {
+    "drawerTitle": "Tagebuch",
+    "drawerDescription": "Gespeicherte Sitzungen. Tippe eine an, um sie zu laden.",
+    "sessions": "Sitzungen ({{count}})",
+    "import": "Import",
+    "export": "Export",
+    "importJournal": "Tagebuch importieren",
+    "exportJournal": "Tagebuch exportieren",
+    "noSessions": "Noch keine Sitzungen. Nimm eine auf und speichere sie.",
+    "rename": "Umbenennen",
+    "downloadAudio": "Audio laden",
+    "delete": "Löschen",
+    "closeActions": "Aktionen schließen",
+    "sessionActions": "Sitzungsaktionen",
+    "saveDialogTitle": "Im Tagebuch gespeichert",
+    "saveDialogDescription": "Sitzung lokal gespeichert. Umbenennen oder Audio herunterladen.",
+    "sessionName": "Name der Sitzung",
+    "defaultSessionName": "Sitzung {{stamp}}",
+    "couldNotLoad": "Tagebuch konnte nicht geladen werden.",
+    "couldNotSave": "Sitzung konnte nicht gespeichert werden.",
+    "sessionNotFound": "Sitzung nicht gefunden.",
+    "couldNotLoadSession": "Sitzung konnte nicht geladen werden.",
+    "couldNotRename": "Umbenennen fehlgeschlagen.",
+    "couldNotDelete": "Löschen fehlgeschlagen.",
+    "couldNotExport": "Export fehlgeschlagen.",
+    "couldNotImport": "Import fehlgeschlagen.",
+    "archiveEmpty": "Archiv enthielt keine Sitzungen.",
+    "importedSessions_one": "{{count}} Sitzung importiert.",
+    "importedSessions_other": "{{count}} Sitzungen importiert.",
+    "tab": "Tagebuch",
+    "clearAll": "Alle löschen",
+    "clearAllConfirm": "Alle {{count}} Sitzungen löschen? Dies kann nicht rückgängig gemacht werden.",
+    "cleared": "Tagebuch geleert.",
+    "couldNotClearAll": "Tagebuch konnte nicht geleert werden.",
+    "tags": "Tags",
+    "editTags": "Tags bearbeiten",
+    "noTags": "Noch keine Tags.",
+    "newTagPlaceholder": "Neuer Tag",
+    "createTag": "Tag erstellen",
+    "selectTagColor": "Tag-Farbe wählen",
+    "allTags": "Alle",
+    "noTaggedSessions": "Keine Sitzungen mit diesem Tag.",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "couldNotSaveTag": "Tag konnte nicht gespeichert werden.",
+    "couldNotSaveTags": "Tags konnten nicht gespeichert werden."
+  },
+  "recording": {
+    "record": "Aufnahme",
+    "pause": "Pause",
+    "continue": "Weiter",
+    "stop": "Stopp",
+    "recBadge": "REC",
+    "pauseBadge": "PAUSE",
+    "dismiss": "Aufnahme verwerfen",
+    "confirmDiscard": "Aufnahme verwerfen",
+    "play": "Abspielen",
+    "playPause": "Pause",
+    "saveToJournal": "Im Tagebuch speichern",
+    "noMicSupport": "Dein Browser unterstützt keine Mikrofonaufnahme.",
+    "noWebAudio": "Dein Browser unterstützt die Web Audio API nicht.",
+    "micBlocked": "Mikrofonzugriff wurde blockiert.",
+    "tapToBegin": "Aufnahme starten"
+  },
+  "metrics": {
+    "pitch": "Tonhöhe",
+    "median": "Median",
+    "span": "Spanne"
+  },
+  "status": {
+    "ready": "Bereit",
+    "recording": "Aufnahme",
+    "paused": "Pause",
+    "review": "Wiedergabe"
+  },
+  "chart": {
+    "full": "Voll",
+    "detail": "Detail"
+  },
+  "sidebar": {
+    "practice": "Detail",
+    "range": "Gewählte Stimmlage",
+    "setup": "Setup",
+    "sets": "Sets",
+    "reading": "Lesen",
+    "journal": "Tagebuch",
+    "advanced": "Erweiterte Einstellungen",
+    "collapse": "Seitenleiste zuklappen"
+  },
+  "routes": {
+    "home": {
+      "title": "{{appName}}",
+      "description": "Stimmlagen-Training-App"
+    },
+    "welcome": {
+      "title": "Willkommen · {{appName}}",
+      "description": "Kurze Tour durch {{appName}}."
+    },
+    "about": {
+      "title": "Über · {{appName}}",
+      "description": "Über {{appName}} und wichtige Infos.",
+      "backToApp": "← Zurück zu {{appName}}",
+      "heading": "🎙️ Über {{appName}}",
+      "intro": "{{appName}} ist eine quelloffene, browserbasierte Stimmlagen-Training-App für das Stimmtraining. Sie läuft komplett im Browser: kein Konto, kein Server, kein Tracking.",
+      "notMedicalTitle": "Kein medizinisches Tool",
+      "notMedicalBody": "{{appName}} diagnostiziert, behandelt oder ersetzt keine professionelle Stimmtherapie. Bitte nutze es ergänzend zu qualifizierter Anleitung durch eine Logopädin/einen Logopäden oder einen Stimm-Coach mit Erfahrung im Trans-Stimmtraining. Üben ohne fachkundige Anleitung kann zu Stimmüberlastung oder Verletzungen führen.",
+      "featuresTitle": "Hauptfunktionen",
+      "feature1": "📊 Tonhöhe in Echtzeit (Macleod, YIN, AMDF)",
+      "feature2": "🎯 Voreingestellte und eigene Stimmbereiche",
+      "feature3": "🔴 Aufnahme mit Wiedergabe und Tonhöhen-Scrub",
+      "feature4": "🗣️ Detailmodus mit Auto-Weiter und Mischen",
+      "feature5": "📓 Lokales Tagebuch mit ZIP-Import/Export",
+      "feature6": "📱 Als Progressive Web App installierbar",
+      "dataTitle": "Wo deine Daten liegen",
+      "dataItem1": "Aufnahmen & Tonhöhen-Daten in IndexedDB (<0>pitchtrain-journal</0>).",
+      "dataItem2": "Einstellungen im localStorage (<0>pitchtrain:range-settings</0>, <1>pitchtrain:practice-settings</1>, <2>pitchtrain:onboarding-completed</2>).",
+      "dataItem3": "Mikrofon-Audio wird nur in deinem Browser verarbeitet.",
+      "dataItem4": "Die Seite wird auf GitHub Pages gehostet.",
+      "seePrivacy": "Siehe vollständiger <0>Datenschutzhinweis</0> und <1>Impressum</1>.",
+      "restartTitle": "Tour erneut starten",
+      "restartBody": "Möchtest du die Einführung nochmal sehen?",
+      "sourceOnGitHub": "Quellcode auf GitHub"
+    },
+    "imprint": {
+      "title": "Impressum · {{appName}}",
+      "description": "Impressum für {{appName}}.",
+      "backToAbout": "← Zurück zu Über",
+      "heading": "Impressum",
+      "intro": "{{appName}} ist ein nicht-kommerzielles, quelloffenes Projekt. Es zeigt keine kommerziellen Inhalte, schaltet keine Werbung und erhebt oder überträgt keine Nutzerdaten.",
+      "maintainer": "Betreuer",
+      "contact": "Kontakt",
+      "sourceCode": "Quellcode",
+      "hosting": "Hosting",
+      "hostingValue": "GitHub Pages (GitHub, Inc., 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, USA)",
+      "responsible": "Verantwortlich für den Inhalt: siehe Betreuer oben.",
+      "seeAlso": "Siehe auch <0>Datenschutzhinweis</0>."
+    },
+    "privacy": {
+      "title": "Datenschutz · {{appName}}",
+      "description": "Datenschutzhinweis für {{appName}}.",
+      "heading": "Datenschutzhinweis",
+      "lastUpdated": "Zuletzt aktualisiert: {{date}}",
+      "section1Title": "1. Was diese App erhebt",
+      "section1Body": "Nichts. {{appName}} hat kein Backend, keine Analytik, keine Cookies und keine Nutzerkonten. Der Betreuer erhält keine Daten über dich. Der Hosting-Anbieter (GitHub Pages) kann Basis-Anfragedaten loggen (siehe Abschnitt 3).",
+      "section2Title": "2. Was auf deinem Gerät bleibt",
+      "section2Item1": "<0>IndexedDB</0>: Aufnahmen und Tonhöhen-Daten unter dem Schlüssel <1>pitchtrain-journal</1>.",
+      "section2Item2": "<0>localStorage</0>: Schlüssel <1>pitchtrain:range-settings</1>, <2>pitchtrain:practice-settings</2> und <3>pitchtrain:onboarding-completed</3>.",
+      "section2Item3": "<0>Mikrofon-Audio</0>: wird nur in deinem Browser verarbeitet. Es verlässt dein Gerät nur, wenn du es exportierst.",
+      "section3Title": "3. Drittanbieter",
+      "section3Body1": "<0>GitHub Pages</0> hostet die statische Seite. Wenn dein Browser die Seite lädt, kann GitHub deine IP-Adresse, User-Agent und Anfrage-URL gemäß ihrer Datenschutzerklärung loggen: <1>GitHub General Privacy Statement</1>. Der Betreuer von {{appName}} hat keinen Zugriff auf diese Logs.",
+      "section3Body2": "<0>installpwa.com</0>: wird nur geladen, wenn du den Installations-Hilfe-Link in der Tour klickst. Deren Datenschutzrichtlinie gilt, wenn du deren Seite besuchst.",
+      "section4Title": "4. Mikrofon-Berechtigung",
+      "section4Body": "{{appName}} fragt Mikrofonzugriff an, um Tonhöhe in Echtzeit zu erkennen. Audio wird nur in deinem Browser analysiert und nirgends übertragen. Aufnahmen, die du speicherst, liegen lokal in IndexedDB.",
+      "section5Title": "5. Deine Rechte (DSGVO Art. 15–22)",
+      "section5Body1": "Da der Betreuer keine personenbezogenen Daten über dich hält, können Anfragen auf Auskunft, Berichtigung oder Löschung nicht von uns bearbeitet werden: wir haben einfach nichts gespeichert. Um alle lokalen {{appName}}-Daten zu entfernen: lösche die Site-Daten dieser Domain im Browser oder deinstalliere die PWA.",
+      "section5Body2": "Für Anfragen zu Logs des Hosting-Anbieters siehe oben die Datenschutzerklärung von GitHub.",
+      "section6Title": "6. Kontakt",
+      "section6Body": "Siehe <0>Impressum</0> für Kontaktinformationen.",
+      "section7Title": "7. Änderungen",
+      "section7Body": "Dieser Hinweis kann aktualisiert werden. Das Datum „Zuletzt aktualisiert\" zeigt die letzte Änderung."
+    }
+  }
+}
