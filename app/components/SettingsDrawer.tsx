@@ -1,5 +1,6 @@
 import {Link, useNavigate} from "react-router";
 import {BookOpenIcon, RotateCcwIcon, ShieldIcon, Trash2Icon} from "lucide-react";
+import {SiGithub} from "@icons-pack/react-simple-icons";
 import {useTranslation} from "react-i18next";
 import type {DetectorAlgorithm, ReadingFeedbackSettings, VoiceRange} from "~/types";
 import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle,} from "./ui/drawer";
@@ -292,15 +293,17 @@ function AboutSection() {
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <AboutTile to="/about" icon={<BookOpenIcon className="size-4"/>} label={t("common.about")}/>
                 <AboutTile to="/privacy" icon={<ShieldIcon className="size-4"/>} label={t("common.privacy")}/>
+                <AboutTile to="https://github.com/Pitchtrain/app" icon={<SiGithub className="size-4"/>} label="GitHub" external/>
             </div>
         </div>
     );
 }
 
-function AboutTile({to, icon, label}: { to: string; icon: React.ReactNode; label: string }) {
+function AboutTile({to, icon, label, external}: { to: string; icon: React.ReactNode; label: string; external?: boolean }) {
     return (
         <Link
             to={to}
+            {...(external ? {target: "_blank", rel: "noopener noreferrer"} : {})}
             className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50"
         >
             <span className="text-slate-500">{icon}</span>
