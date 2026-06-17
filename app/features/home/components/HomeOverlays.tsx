@@ -52,6 +52,8 @@ type Props = {
   onRenameSession: (id: string, name: string) => void;
   onSessionTagChange: (id: string, tagIds: string[]) => void;
   onCreateJournalTag: (label: string, color: string) => JournalTag | null;
+  onUpdateJournalTag: (id: string, label: string, color: string) => void;
+  onDeleteJournalTag: (id: string) => void;
   onJournalTagFilterChange: (tagId: string | null) => void;
   onDeleteSession: (id: string) => void;
   onDownloadSession: (id: string) => void;
@@ -116,6 +118,8 @@ export function HomeOverlays({
   onRenameSession,
   onSessionTagChange,
   onCreateJournalTag,
+  onUpdateJournalTag,
+  onDeleteJournalTag,
   onJournalTagFilterChange,
   onDeleteSession,
   onDownloadSession,
@@ -185,6 +189,8 @@ export function HomeOverlays({
         onRename={onRenameSession}
         onTagChange={onSessionTagChange}
         onCreateTag={onCreateJournalTag}
+        onUpdateTag={onUpdateJournalTag}
+        onDeleteTag={onDeleteJournalTag}
         onTagFilterChange={onJournalTagFilterChange}
         onDelete={onDeleteSession}
         onDownload={onDownloadSession}

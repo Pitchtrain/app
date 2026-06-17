@@ -67,8 +67,8 @@ export function JournalSaveDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="px-6">
-          <div className="space-y-4">
-            <label className="space-y-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="space-y-5">
+            <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
               {t("journal.sessionName")}
               <input
                 value={name}
@@ -85,7 +85,7 @@ export function JournalSaveDialog({
               />
             </label>
             {session && (
-              <div className="space-y-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {t("journal.tags")}
                 <JournalTagPicker
                   tags={tags}

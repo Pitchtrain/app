@@ -4,6 +4,7 @@ import {
   ImportIcon,
   MoreHorizontalIcon,
   PencilIcon,
+  SettingsIcon,
   TagsIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -13,6 +14,7 @@ import { Button } from "./ui/button";
 import { formatBytes, formatClockMs } from "../lib/format";
 import { getTagSessionCounts, tagPillStyle } from "../journal/tags";
 import { JournalTagPicker } from "./JournalTagPicker";
+import { JournalTagManager } from "./JournalTagManager";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
   Dialog,
@@ -32,6 +34,8 @@ type Props = {
   onRename: (id: string, name: string) => void;
   onTagChange: (id: string, tagIds: string[]) => void;
   onCreateTag: (label: string, color: string) => JournalTag | null;
+  onUpdateTag: (id: string, label: string, color: string) => void;
+  onDeleteTag: (id: string) => void;
   onTagFilterChange: (tagId: string | null) => void;
   onDelete: (id: string) => void;
   onDownload: (id: string) => void;
@@ -50,6 +54,8 @@ export function JournalPanel({
   onRename,
   onTagChange,
   onCreateTag,
+  onUpdateTag,
+  onDeleteTag,
   onTagFilterChange,
   onDelete,
   onDownload,
@@ -59,6 +65,7 @@ export function JournalPanel({
 }: Props) {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [tagManagerOpen, setTagManagerOpen] = useState(false);
   const tagCounts = useMemo(() => getTagSessionCounts(sessions), [sessions]);
   const visibleSessions = useMemo(
     () =>
@@ -168,8 +175,27 @@ export function JournalPanel({
               </span>
             </button>
           ))}
+          {tags.length > 0 && (
+            <Button
+              size="icon-sm"
+              variant="outline"
+              onClick={() => setTagManagerOpen(true)}
+              aria-label={t("journal.manageTags")}
+              className="size-8 shrink-0 rounded-full"
+            >
+              <SettingsIcon className="size-3.5" />
+            </Button>
+          )}
         </div>
       </div>
+      <JournalTagManager
+        open={tagManagerOpen}
+        onOpenChange={setTagManagerOpen}
+        tags={tags}
+        sessions={sessions}
+        onUpdateTag={onUpdateTag}
+        onDeleteTag={onDeleteTag}
+      />
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
         {sessions.length === 0 ? (
@@ -367,8 +393,8 @@ function JournalRow({
           <DialogHeader>
             <DialogTitle>{t("journal.sessionActions")}</DialogTitle>
           </DialogHeader>
-          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6">
-            <label className="space-y-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-6">
+            <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
               {t("journal.sessionName")}
               <input
                 autoFocus
@@ -386,7 +412,7 @@ function JournalRow({
                 className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-slate-800 outline-none focus:border-sea"
               />
             </label>
-            <div className="space-y-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <div className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
               {t("journal.tags")}
               <JournalTagPicker
                 tags={tags}

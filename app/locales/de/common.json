@@ -324,7 +324,12 @@
     "today": "Heute",
     "yesterday": "Gestern",
     "couldNotSaveTag": "Tag konnte nicht gespeichert werden.",
-    "couldNotSaveTags": "Tags konnten nicht gespeichert werden."
+    "couldNotSaveTags": "Tags konnten nicht gespeichert werden.",
+    "couldNotDeleteTag": "Tag konnte nicht gelöscht werden.",
+    "duplicateTag": "Ein Tag mit diesem Namen existiert bereits.",
+    "manageTags": "Tags verwalten",
+    "deleteTag": "Tag löschen",
+    "deleteTagConfirm": "Tag \"{{label}}\" löschen? Er ist {{count}} Aufnahme(n) zugewiesen."
   },
   "recording": {
     "record": "Aufnahme",

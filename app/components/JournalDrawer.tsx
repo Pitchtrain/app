@@ -21,6 +21,8 @@ type Props = {
   onRename: (id: string, name: string) => void;
   onTagChange: (id: string, tagIds: string[]) => void;
   onCreateTag: (label: string, color: string) => JournalTag | null;
+  onUpdateTag: (id: string, label: string, color: string) => void;
+  onDeleteTag: (id: string) => void;
   onTagFilterChange: (tagId: string | null) => void;
   onDelete: (id: string) => void;
   onDownload: (id: string) => void;
@@ -41,6 +43,8 @@ export function JournalDrawer({
   onRename,
   onTagChange,
   onCreateTag,
+  onUpdateTag,
+  onDeleteTag,
   onTagFilterChange,
   onDelete,
   onDownload,
@@ -72,6 +76,8 @@ export function JournalDrawer({
             onRename={onRename}
             onTagChange={onTagChange}
             onCreateTag={onCreateTag}
+            onUpdateTag={onUpdateTag}
+            onDeleteTag={onDeleteTag}
             onTagFilterChange={onTagFilterChange}
             onDelete={onDelete}
             onDownload={onDownload}

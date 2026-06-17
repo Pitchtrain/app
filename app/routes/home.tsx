@@ -248,6 +248,8 @@ export default function Home() {
             void journal.handleSessionTagChange(id, tagIds)
           }
           onCreateJournalTag={journal.handleCreateJournalTag}
+          onUpdateJournalTag={journal.handleUpdateJournalTag}
+          onDeleteJournalTag={(id) => void journal.handleDeleteJournalTag(id)}
           onJournalTagFilterChange={journal.setActiveJournalTagId}
           onDeleteSession={(id) => void journal.handleDeleteSession(id)}
           onDownloadSession={(id) => void journal.handleDownloadSessionById(id)}
@@ -305,6 +307,8 @@ export default function Home() {
           void journal.handleSessionTagChange(id, tagIds)
         }
         onCreateJournalTag={journal.handleCreateJournalTag}
+        onUpdateJournalTag={journal.handleUpdateJournalTag}
+        onDeleteJournalTag={(id) => void journal.handleDeleteJournalTag(id)}
         onJournalTagFilterChange={journal.setActiveJournalTagId}
         onDeleteSession={(id) => void journal.handleDeleteSession(id)}
         onDownloadSession={(id) => void journal.handleDownloadSessionById(id)}

@@ -324,7 +324,12 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "couldNotSaveTag": "Could not save tag.",
-    "couldNotSaveTags": "Could not save tags."
+    "couldNotSaveTags": "Could not save tags.",
+    "couldNotDeleteTag": "Could not delete tag.",
+    "duplicateTag": "A tag with that name already exists.",
+    "manageTags": "Manage tags",
+    "deleteTag": "Delete tag",
+    "deleteTagConfirm": "Delete the tag \"{{label}}\"? It is applied to {{count}} session(s)."
   },
   "recording": {
     "record": "Record",

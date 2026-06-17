@@ -91,20 +91,27 @@ export function JournalTagPicker({
             <PlusIcon className="size-4" />
           </Button>
         </div>
-        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1">
-          {TAG_COLORS.map((tagColor) => (
-            <button
-              key={tagColor}
-              type="button"
-              onClick={() => setColor(tagColor)}
-              className="grid size-7 shrink-0 place-items-center rounded-full border border-white shadow-sm ring-offset-1 focus:outline-none focus:ring-2 focus:ring-sea"
-              style={{ backgroundColor: tagColor }}
-              aria-label={t("journal.selectTagColor")}
-              aria-pressed={color === tagColor}
-            >
-              {color === tagColor && <CheckIcon className="size-4 text-white" />}
-            </button>
-          ))}
+        <div className="mt-2 flex flex-wrap gap-2 px-0.5 py-1">
+          {TAG_COLORS.map((tagColor) => {
+            const selected = color === tagColor;
+            return (
+              <button
+                key={tagColor}
+                type="button"
+                onClick={() => setColor(tagColor)}
+                className={`grid size-7 shrink-0 place-items-center rounded-full ring-1 ring-inset ring-black/10 transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-sea ${
+                  selected
+                    ? "outline outline-2 outline-offset-2 outline-sea"
+                    : ""
+                }`}
+                style={{ backgroundColor: tagColor }}
+                aria-label={t("journal.selectTagColor")}
+                aria-pressed={selected}
+              >
+                {selected && <CheckIcon className="size-4 text-white" />}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

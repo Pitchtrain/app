@@ -19,6 +19,7 @@ import {
   bulkPutTags,
   clearSessions,
   deleteSession,
+  deleteTag,
   getSession,
   listSessions,
   listTags,
@@ -175,6 +176,54 @@ export function useJournalLibrary({
     }
   }
 
+  function handleUpdateJournalTag(id: string, label: string, color: string) {
+    const trimmed = label.trim();
+    if (!trimmed) return;
+    const existing = journalTags.find((tag) => tag.id === id);
+    if (!existing) return;
+    const duplicate = journalTags.find(
+      (tag) =>
+        tag.id !== id &&
+        tag.label.trim().toLowerCase() === trimmed.toLowerCase(),
+    );
+    if (duplicate) {
+      toast.error(t("journal.duplicateTag"));
+      return;
+    }
+    if (existing.label === trimmed && existing.color === color) return;
+    const updated: JournalTag = { ...existing, label: trimmed, color };
+    setJournalTags((prev) => prev.map((tag) => (tag.id === id ? updated : tag)));
+    void putTag(updated).catch((error) => {
+      console.error(error);
+      setJournalTags((prev) =>
+        prev.map((tag) => (tag.id === id ? existing : tag)),
+      );
+      toast.error(t("journal.couldNotSaveTag"));
+    });
+  }
+
+  async function handleDeleteJournalTag(id: string) {
+    const prevTags = journalTags;
+    const prevSessions = journalSessions;
+    setJournalTags((prev) => prev.filter((tag) => tag.id !== id));
+    setJournalSessions((prev) =>
+      prev.map((session) =>
+        session.tagIds.includes(id)
+          ? { ...session, tagIds: session.tagIds.filter((t) => t !== id) }
+          : session,
+      ),
+    );
+    if (activeJournalTagId === id) setActiveJournalTagId(null);
+    try {
+      await deleteTag(id);
+    } catch (error) {
+      console.error(error);
+      setJournalTags(prevTags);
+      setJournalSessions(prevSessions);
+      toast.error(t("journal.couldNotDeleteTag"));
+    }
+  }
+
   async function handleLoadSession(id: string) {
     try {
       const saved = await getSession(id);
@@ -325,6 +374,8 @@ export function useJournalLibrary({
     setActiveJournalTagId,
     handleSave,
     handleCreateJournalTag,
+    handleUpdateJournalTag,
+    handleDeleteJournalTag,
     handleSessionTagChange,
     handleLoadSession,
     handleRenameSession,
