@@ -79,6 +79,7 @@ export function ReadingOptionsPanel({
       texts: [...settings.texts, text],
       activeTextId: text.id,
     });
+    setEditingTextId(text.id);
   }
 
   function saveText(next: ReadingText) {
