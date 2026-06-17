@@ -21,6 +21,13 @@ import {
   type ReadingLibraryText,
   type ReadingSample,
 } from "~/readingSamples";
+import {
+  filterLibraryTexts,
+  loadLibraryFilters,
+  saveLibraryFilters,
+  type LibraryKindFilter,
+  type LibraryLocaleFilter,
+} from "~/readingLibraryFilters";
 import { Button } from "./ui/button";
 import {
   Drawer,
@@ -48,9 +55,6 @@ type Props = {
 type ReadingOptionsPanelProps = Omit<Props, "open" | "onOpenChange"> & {
   className?: string;
 };
-
-type LibraryLocaleFilter = "all" | ReadingSample["locale"];
-type LibraryKindFilter = "all" | ReadingSample["kind"];
 
 export function ReadingOptionsPanel({
   settings,
@@ -316,13 +320,21 @@ function LibraryTextsSection({
   onRandom: (texts: ReadingLibraryText[]) => void;
 }) {
   const { t } = useTranslation();
-  const [localeFilter, setLocaleFilter] = useState<LibraryLocaleFilter>("all");
-  const [kindFilter, setKindFilter] = useState<LibraryKindFilter>("all");
-  const filteredTexts = READING_LIBRARY_TEXTS.filter(
-    (text) =>
-      (localeFilter === "all" || text.locale === localeFilter) &&
-      (kindFilter === "all" || text.kind === kindFilter),
+  const [localeFilter, setLocaleFilter] = useState<LibraryLocaleFilter>(
+    () => loadLibraryFilters().locale,
   );
+  const [kindFilter, setKindFilter] = useState<LibraryKindFilter>(
+    () => loadLibraryFilters().kind,
+  );
+
+  useEffect(() => {
+    saveLibraryFilters({ locale: localeFilter, kind: kindFilter });
+  }, [localeFilter, kindFilter]);
+
+  const filteredTexts = filterLibraryTexts({
+    locale: localeFilter,
+    kind: kindFilter,
+  });
 
   return (
     <div className="flex h-full min-h-0 flex-col">

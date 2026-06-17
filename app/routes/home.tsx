@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { redirect } from "react-router";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import {
+  filterLibraryTexts,
+  loadLibraryFilters,
+  pickRandomLibraryText,
+} from "~/readingLibraryFilters";
 import type { Route } from "./+types/home";
 import { hasCompletedOnboarding } from "~/onboarding";
 import { APP_DESCRIPTION } from "~/lib/appConfig";
@@ -96,6 +102,13 @@ export default function Home() {
     0,
   );
 
+  function showRandomReadingText() {
+    const text = pickRandomLibraryText(filterLibraryTexts(loadLibraryFilters()));
+    if (!text) return;
+    reading.setReadingSettings((prev) => ({ ...prev, activeTextId: text.id }));
+    toast.success(t("reading.randomShown", { title: text.title }));
+  }
+
   function openPracticeSets() {
     if (hasDesktopSidebar()) {
       setDesktopPanel("sets");
@@ -138,6 +151,7 @@ export default function Home() {
               activeReadingText={reading.activeReadingText}
               feedbackDirection={visibleReadingFeedbackDirection}
               onOpenOptions={reading.openReadingOptions}
+              onRandomText={showRandomReadingText}
             />
           ) : (
             <PracticePane

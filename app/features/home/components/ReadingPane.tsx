@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Settings2Icon } from "lucide-react";
+import { Settings2Icon, ShuffleIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { ReadingFeedbackDirection } from "~/pitch";
 import type { ReadingText } from "~/types";
@@ -16,6 +16,7 @@ type Props = {
   activeReadingText: ReadingText | null;
   feedbackDirection: ReadingFeedbackDirection | null;
   onOpenOptions: () => void;
+  onRandomText: () => void;
 };
 
 export function ReadingPane({
@@ -23,6 +24,7 @@ export function ReadingPane({
   activeReadingText,
   feedbackDirection,
   onOpenOptions,
+  onRandomText,
 }: Props) {
   const { t } = useTranslation();
 
@@ -64,6 +66,15 @@ export function ReadingPane({
         className="absolute bottom-[calc(max(0.75rem,env(safe-area-inset-bottom))+0.375rem)] left-[max(0.75rem,env(safe-area-inset-left))] z-30 size-14 rounded-full border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-sm hover:bg-white lg:hidden"
       >
         <Settings2Icon className="size-5.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onRandomText}
+        aria-label={t("reading.randomText")}
+        className="absolute bottom-[calc(max(0.75rem,env(safe-area-inset-bottom))+0.375rem+4.125rem)] left-[max(0.75rem,env(safe-area-inset-left))] z-30 size-14 rounded-full border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-sm hover:bg-white lg:bottom-[calc(max(0.75rem,env(safe-area-inset-bottom))+0.375rem)]"
+      >
+        <ShuffleIcon className="size-5.5" />
       </Button>
     </>
   );

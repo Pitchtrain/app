@@ -6,6 +6,7 @@ function buildKey(namespace: string, suffix: string) {
 
 export const STORAGE_KEYS = {
   language: buildKey(CURRENT_NAMESPACE, "language"),
+  libraryFilters: buildKey(CURRENT_NAMESPACE, "library-filters"),
   onboardingCompleted: buildKey(CURRENT_NAMESPACE, "onboarding-completed"),
   practiceSettings: buildKey(CURRENT_NAMESPACE, "practice-settings"),
   rangeSettings: buildKey(CURRENT_NAMESPACE, "range-settings"),

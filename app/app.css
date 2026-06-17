@@ -117,6 +117,29 @@ audio {
   @apply fill-slate-500 text-[11px] font-medium;
 }
 
+/* iOS-style Sonner toasts */
+.cn-toast {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 14px 16px;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.cn-toast [data-title] {
+  font-weight: 600;
+}
+
+.cn-toast [data-description] {
+  opacity: 0.62;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Figtree Variable', sans-serif;
