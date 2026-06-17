@@ -3,11 +3,11 @@
   "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
-    "build": "react-router build && node scripts/generate-service-worker.mjs",
+    "build": "pwa-assets-generator && react-router build && node scripts/generate-service-worker.mjs",
     "dev": "react-router dev",
     "preview": "vite preview --outDir build/client",
     "start": "vite preview --outDir build/client",
-    "generate-pwa-assets": "pwa-assets-generator",
+    "gen:pwa": "pwa-assets-generator",
     "typecheck": "react-router typegen && tsc",
     "test": "vitest",
     "eval:spikes": "vite-node --config vitest.config.ts scripts/eval-spike-filter.ts",
