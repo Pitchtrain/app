@@ -1,11 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
-import type { PracticeSet, PracticeSettings } from "~/types";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { PracticeItem, PracticeSet, PracticeSettings } from "~/types";
 import {
   buildOrderedQueue,
   buildShuffledQueue,
   loadPracticeSettings,
   savePracticeSettings,
 } from "~/practice";
+
+function buildPool(
+  settings: PracticeSettings,
+  avoidFirstId?: string,
+): PracticeItem[] {
+  return settings.shuffleEnabled
+    ? buildShuffledQueue(settings.sets, settings.activeSetIds, avoidFirstId)
+    : buildOrderedQueue(settings.sets, settings.activeSetIds);
+}
 
 export function usePracticeState() {
   const initialPractice = useMemo(() => loadPracticeSettings(), []);
@@ -14,32 +23,31 @@ export function usePracticeState() {
   const [practiceDrawerOpen, setPracticeDrawerOpen] = useState(false);
   const [practiceActiveSheetOpen, setPracticeActiveSheetOpen] = useState(false);
   const [practiceIndex, setPracticeIndex] = useState(0);
-  const [practiceShuffleKey, setPracticeShuffleKey] = useState(0);
-
-  const practicePool = useMemo(
-    () =>
-      practiceSettings.shuffleEnabled
-        ? buildShuffledQueue(
-            practiceSettings.sets,
-            practiceSettings.activeSetIds,
-          )
-        : buildOrderedQueue(
-            practiceSettings.sets,
-            practiceSettings.activeSetIds,
-          ),
-    // re-shuffle when active set ids change, items change, shuffle flag flips, or user triggers reshuffle
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      practiceSettings.sets,
-      practiceSettings.activeSetIds,
-      practiceSettings.shuffleEnabled,
-      practiceShuffleKey,
-    ],
+  const [practicePool, setPracticePool] = useState<PracticeItem[]>(() =>
+    buildPool(initialPractice),
   );
 
-  useEffect(() => {
+  // Keep a stable run order; only rebuild on explicit regenerate so that
+  // forward/back navigation within a run is deterministic.
+  function regenerate(settings: PracticeSettings, avoidFirstId?: string) {
+    setPracticePool(buildPool(settings, avoidFirstId));
     setPracticeIndex(0);
-  }, [practicePool]);
+  }
+
+  // Skip the very first effect run — the initial pool is already built above.
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    regenerate(practiceSettings);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    practiceSettings.sets,
+    practiceSettings.activeSetIds,
+    practiceSettings.shuffleEnabled,
+  ]);
 
   useEffect(() => {
     savePracticeSettings(practiceSettings);
@@ -66,16 +74,17 @@ export function usePracticeState() {
 
   function nextPrompt() {
     if (practicePool.length === 0) return;
-    setPracticeIndex((i) => {
-      const next = i + 1;
-      if (next >= practicePool.length) {
-        if (practiceSettings.shuffleEnabled) {
-          setPracticeShuffleKey((k) => k + 1);
-        }
-        return 0;
+    if (practiceIndex + 1 >= practicePool.length) {
+      // End of run: ordered mode wraps in place; shuffle mode starts a fresh
+      // run, avoiding the just-shown item landing first.
+      if (practiceSettings.shuffleEnabled) {
+        regenerate(practiceSettings, practicePool[practiceIndex].id);
+      } else {
+        setPracticeIndex(0);
       }
-      return next;
-    });
+    } else {
+      setPracticeIndex(practiceIndex + 1);
+    }
   }
 
   function prevPrompt() {
@@ -86,10 +95,8 @@ export function usePracticeState() {
   }
 
   function setShuffleEnabled(enabled: boolean) {
+    // The shuffleEnabled effect regenerates the pool.
     setPracticeSettings((prev) => ({ ...prev, shuffleEnabled: enabled }));
-    if (enabled) {
-      setPracticeShuffleKey((k) => k + 1);
-    }
   }
 
   function setAutoAdvanceSeconds(seconds: number) {

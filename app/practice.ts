@@ -95,8 +95,14 @@ export function buildOrderedQueue(
 export function buildShuffledQueue(
     sets: PracticeSet[],
     activeIds: string[],
+    avoidFirstId?: string,
 ): PracticeItem[] {
-    return shuffle(buildOrderedQueue(sets, activeIds));
+    const arr = shuffle(buildOrderedQueue(sets, activeIds));
+    if (avoidFirstId && arr.length > 1 && arr[0].id === avoidFirstId) {
+        const j = 1 + Math.floor(Math.random() * (arr.length - 1));
+        [arr[0], arr[j]] = [arr[j], arr[0]];
+    }
+    return arr;
 }
 
 function getDefaultSettings(): PracticeSettings {
