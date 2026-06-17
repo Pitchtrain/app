@@ -70,18 +70,34 @@
         "body": "Install {{appName}} to your home screen and use it everywhere. We'll show you how."
       }
     },
+    "modes": {
+      "title": "Ways to practice",
+      "detail": {
+        "title": "Detail mode",
+        "body": "Practice short prompts and tongue twisters one at a time. Tap or use the arrows to move on, or turn on shuffle and auto-advance."
+      },
+      "reading": {
+        "title": "Reading mode",
+        "body": "Read longer texts teleprompter-style. Use your own texts or pick from the built-in library."
+      },
+      "feedback": {
+        "title": "Live feedback",
+        "body": "A soft glow around the text shows when your pitch drifts: warm when you're above your target range, cool when below. In Reading mode you can tune the goal and threshold."
+      }
+    },
     "range": {
       "title": "🎯 Pick a starting range",
       "intro": "These are target frequency ranges commonly used in voice training, not statements about identity. Pick whatever you'd like to practice toward. You can change it any time.",
       "minHz": "Min Hz",
       "maxHz": "Max Hz",
+      "feedbackGoal": "Feedback goal",
+      "feedbackGoalIntro": "Choose which boundary the live feedback reacts to.",
       "later": "You can also change this later on in the Settings."
     },
     "privacy": {
       "title": "Your data stays with you",
       "items": {
-        "indexeddb": "🎵 Recordings and pitch samples live in your browser's IndexedDB (under <0>pitchtrain-journal</0>).",
-        "settings": "⚙️ Settings are stored in your browser's localStorage. Nothing leaves your device.",
+        "indexeddb": "🎵 Recordings and pitch samples live in your browser's storage. Nothing leaves your device.",
         "exports": "📦 Exports are ZIP files you download yourself. They're yours entirely.",
         "hosting": "🌐 The app is hosted on GitHub Pages. GitHub itself may log basic request info (IP, browser); the maintainer doesn't see it.",
         "noTracking": "🚫 No accounts, no analytics, no cookies, no tracking."

@@ -2,8 +2,17 @@ import {useMemo, useState} from "react";
 import {useNavigate} from "react-router";
 import {Trans, useTranslation} from "react-i18next";
 import {Button} from "~/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 import {clampRangeValue, CUSTOM_RANGE_ID, DEFAULT_RANGES} from "~/ranges";
 import {loadRangeSettings, saveRangeSettings} from "~/storage";
+import {loadReadingSettings, saveReadingSettings} from "~/reading";
+import type {ReadingRangeGoal} from "~/types";
 import {markOnboardingCompleted} from "~/onboarding";
 import {detectPlatform, isPWAInstalled} from "~/lib/platform";
 import {usePWAInstall} from "~/hooks/usePWAInstall";
@@ -13,6 +22,7 @@ type StepKey =
     | "welcome"
     | "not-medical"
     | "features"
+    | "modes"
     | "range"
     | "privacy"
     | "install"
@@ -23,6 +33,7 @@ const ALL_STEPS: StepKey[] = [
     "welcome",
     "not-medical",
     "features",
+    "modes",
     "range",
     "privacy",
     "install",
@@ -34,6 +45,7 @@ const STEPS_NO_INSTALL: StepKey[] = [
     "welcome",
     "not-medical",
     "features",
+    "modes",
     "range",
     "privacy",
     "done",
@@ -50,6 +62,9 @@ export function WelcomeStepper() {
     const [customMaxHz, setCustomMaxHz] = useState(200);
     const [customMinInput, setCustomMinInput] = useState("150");
     const [customMaxInput, setCustomMaxInput] = useState("200");
+    const [feedbackGoal, setFeedbackGoal] = useState<ReadingRangeGoal>(
+        () => loadReadingSettings().feedback.rangeGoal,
+    );
 
     const step = STEPS[stepIndex];
     const isFirst = stepIndex === 0;
@@ -167,6 +182,15 @@ export function WelcomeStepper() {
         });
     }
 
+    function handleFeedbackGoalChange(goal: ReadingRangeGoal) {
+        setFeedbackGoal(goal);
+        const existing = loadReadingSettings();
+        saveReadingSettings({
+            ...existing,
+            feedback: {...existing.feedback, rangeGoal: goal},
+        });
+    }
+
     const canAdvance = step === "not-medical" ? understood : true;
 
     return (
@@ -204,6 +228,7 @@ export function WelcomeStepper() {
                     />
                 )}
                 {step === "features" && <StepFeatures/>}
+                {step === "modes" && <StepModes/>}
                 {step === "range" && (
                     <StepPickRange
                         pickedRangeId={pickedRangeId}
@@ -214,6 +239,8 @@ export function WelcomeStepper() {
                         customMaxInput={customMaxInput}
                         onCustomChange={handleCustomChange}
                         onCustomBlur={handleCustomBlur}
+                        feedbackGoal={feedbackGoal}
+                        onFeedbackGoalChange={handleFeedbackGoalChange}
                     />
                 )}
                 {step === "privacy" && <StepPrivacy/>}
@@ -378,6 +405,36 @@ function StepFeatures() {
     );
 }
 
+function StepModes() {
+    const {t} = useTranslation();
+    const modes: Array<{ emoji: string; titleKey: string; bodyKey: string }> = [
+        {emoji: "🗣️", titleKey: "onboarding.modes.detail.title", bodyKey: "onboarding.modes.detail.body"},
+        {emoji: "📖", titleKey: "onboarding.modes.reading.title", bodyKey: "onboarding.modes.reading.body"},
+        {emoji: "🌈", titleKey: "onboarding.modes.feedback.title", bodyKey: "onboarding.modes.feedback.body"},
+    ];
+    return (
+        <section className="space-y-4">
+            <h2 className="text-xl font-semibold tracking-tight">
+                {t("onboarding.modes.title")}
+            </h2>
+            <ul className="space-y-3">
+                {modes.map((m) => (
+                    <li
+                        key={m.titleKey}
+                        className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white/70 p-3"
+                    >
+                        <span className="text-2xl leading-none">{m.emoji}</span>
+                        <div>
+                            <div className="font-medium">{t(m.titleKey)}</div>
+                            <div className="text-sm text-slate-600">{t(m.bodyKey)}</div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    );
+}
+
 function StepPickRange({
                            pickedRangeId,
                            onPick,
@@ -387,6 +444,8 @@ function StepPickRange({
                            customMaxInput,
                            onCustomChange,
                            onCustomBlur,
+                           feedbackGoal,
+                           onFeedbackGoalChange,
                        }: {
     pickedRangeId: string | null;
     onPick: (id: string) => void;
@@ -396,6 +455,8 @@ function StepPickRange({
     customMaxInput: string;
     onCustomChange: (field: "minHz" | "maxHz", value: string) => void;
     onCustomBlur: (field: "minHz" | "maxHz") => void;
+    feedbackGoal: ReadingRangeGoal;
+    onFeedbackGoalChange: (goal: ReadingRangeGoal) => void;
 }) {
     const {t} = useTranslation();
     const cards = useMemo(
@@ -504,12 +565,38 @@ function StepPickRange({
                     </div>
                 </div>
             </div>
+            <div className="space-y-2 pt-2">
+                <h3 className="text-sm font-semibold tracking-tight">
+                    {t("onboarding.range.feedbackGoal")}
+                </h3>
+                <p className="text-sm text-slate-600">
+                    {t("onboarding.range.feedbackGoalIntro")}
+                </p>
+                <Select
+                    value={feedbackGoal}
+                    onValueChange={(value) => onFeedbackGoalChange(value as ReadingRangeGoal)}
+                >
+                    <SelectTrigger className="w-full">
+                        <SelectValue/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        {FEEDBACK_GOAL_OPTIONS.map((goal) => (
+                            <SelectItem key={goal} value={goal}>
+                                {t(`reading.feedbackGoals.${goal}`)}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
             <p className="text-xs text-slate-500">
                 {t("onboarding.range.later")}
             </p>
         </section>
     );
 }
+
+const FEEDBACK_GOAL_OPTIONS: ReadingRangeGoal[] = ["auto", "both", "above", "below"];
 
 const RANGE_EMOJI: Record<string, string> = {
     female: "🙍‍♀️",
@@ -526,13 +613,7 @@ function StepPrivacy() {
                 {t("onboarding.privacy.title")}
             </h2>
             <ul className="space-y-2 text-sm text-slate-700">
-                <li>
-                    <Trans
-                        i18nKey="onboarding.privacy.items.indexeddb"
-                        components={[<code key="0"/>]}
-                    />
-                </li>
-                <li>{t("onboarding.privacy.items.settings")}</li>
+                <li>{t("onboarding.privacy.items.indexeddb")}</li>
                 <li>{t("onboarding.privacy.items.exports")}</li>
                 <li>{t("onboarding.privacy.items.hosting")}</li>
                 <li>{t("onboarding.privacy.items.noTracking")}</li>

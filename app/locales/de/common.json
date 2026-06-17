@@ -70,18 +70,34 @@
         "body": "Installiere {{appName}} auf deinem Startbildschirm und nutze es überall. Wir zeigen dir wie."
       }
     },
+    "modes": {
+      "title": "Möglichkeiten zum Üben",
+      "detail": {
+        "title": "Detailmodus",
+        "body": "Übe kurze Sätze und Zungenbrecher einzeln. Tippe oder nutze die Pfeile zum Weiterschalten, oder aktiviere Mischen und automatisches Weiterschalten."
+      },
+      "reading": {
+        "title": "Lesemodus",
+        "body": "Lies längere Texte wie an einem Teleprompter. Nutze eigene Texte oder wähle aus der eingebauten Bibliothek."
+      },
+      "feedback": {
+        "title": "Live-Feedback",
+        "body": "Ein sanftes Leuchten um den Text zeigt, wenn deine Tonhöhe abweicht: warm, wenn du über deinem Zielbereich liegst, kühl, wenn darunter. Im Lesemodus kannst du Ziel und Schwelle anpassen."
+      }
+    },
     "range": {
       "title": "🎯 Startbereich wählen",
       "intro": "Dies sind Frequenzbereiche, die im Stimmtraining üblich sind, keine Aussage über Identität. Wähle, worauf du üben möchtest. Du kannst es jederzeit ändern.",
       "minHz": "Min Hz",
       "maxHz": "Max Hz",
+      "feedbackGoal": "Feedback-Ziel",
+      "feedbackGoalIntro": "Wähle, auf welche Grenze das Live-Feedback reagiert.",
       "later": "Du kannst dies auch später in den Einstellungen ändern."
     },
     "privacy": {
       "title": "Deine Daten bleiben bei dir",
       "items": {
-        "indexeddb": "🎵 Aufnahmen und Tonhöhen-Daten liegen in der IndexedDB deines Browsers (unter <0>pitchtrain-journal</0>).",
-        "settings": "⚙️ Einstellungen liegen im localStorage des Browsers. Nichts verlässt dein Gerät.",
+        "indexeddb": "🎵 Aufnahmen und Tonhöhen-Daten liegen im Speicher deines Browsers. Nichts verlässt dein Gerät.",
         "exports": "📦 Exporte sind ZIP-Dateien, die du selbst herunterlädst. Sie gehören dir.",
         "hosting": "🌐 Die App läuft auf GitHub Pages. GitHub kann Basis-Anfragedaten loggen (IP, Browser); der Betreuer sieht das nicht.",
         "noTracking": "🚫 Keine Konten, kein Tracking, keine Cookies, keine Analytik."
