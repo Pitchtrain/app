@@ -1,3 +1,4 @@
+import {SiGithub} from "@icons-pack/react-simple-icons";
 import {
     BookMarkedIcon,
     BookOpenTextIcon,
@@ -281,6 +282,12 @@ function Rail({
             />
             <div className="mt-auto flex flex-col items-center gap-2">
                 <RailLink
+                    label="GitHub"
+                    to="https://github.com/Pitchtrain/app"
+                    external
+                    icon={<SiGithub className="size-5"/>}
+                />
+                <RailLink
                     label={t("common.about")}
                     to="/about"
                     icon={<InfoIcon className="size-5"/>}
@@ -300,10 +307,12 @@ function RailLink({
     label,
     to,
     icon,
+    external,
 }: {
     label: string;
     to: string;
     icon: ReactNode;
+    external?: boolean;
 }) {
     return (
         <Tooltip>
@@ -315,7 +324,7 @@ function RailLink({
                     aria-label={label}
                     className="text-slate-500 hover:text-ink"
                 >
-                    <Link to={to}>{icon}</Link>
+                    <Link to={to} {...(external ? {target: "_blank", rel: "noopener noreferrer"} : {})}>{icon}</Link>
                 </Button>
             </TooltipTrigger>
             <TooltipContent side="left">{label}</TooltipContent>
