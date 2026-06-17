@@ -7,6 +7,7 @@ import type {
 } from "./types";
 import { STORAGE_KEYS } from "~/lib/storageKeys";
 import { READING_LIBRARY_TEXTS } from "./readingSamples";
+import type { ReadingArchive } from "./journal/zip";
 
 export const DEFAULT_READING_FEEDBACK: ReadingFeedbackSettings = {
   rangeGoal: "auto",
@@ -139,4 +140,49 @@ export function loadReadingSettings(): ReadingSettings {
 export function saveReadingSettings(settings: ReadingSettings) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEYS.readingSettings, JSON.stringify(settings));
+}
+
+// Own (non-module) reading texts plus their settings, for the journal archive.
+export function buildReadingArchive(settings: ReadingSettings): ReadingArchive {
+  return {
+    texts: settings.texts.filter((text) => text.source !== "module"),
+    activeTextId: settings.activeTextId,
+    feedback: settings.feedback,
+  };
+}
+
+// Merge an imported archive into current settings: add new own texts (by id),
+// restore feedback and active selection when present.
+export function mergeReadingArchive(
+  current: ReadingSettings,
+  archive: unknown,
+): ReadingSettings {
+  if (!archive || typeof archive !== "object") return current;
+  const obj = archive as Record<string, unknown>;
+
+  const importedTexts = Array.isArray(obj.texts)
+    ? obj.texts
+        .map(sanitizeText)
+        .filter((text): text is ReadingText => text != null)
+        .filter((text) => text.source !== "module")
+    : [];
+  const existingIds = new Set(current.texts.map((text) => text.id));
+  const texts = [
+    ...current.texts,
+    ...importedTexts.filter((text) => !existingIds.has(text.id)),
+  ];
+
+  const feedback =
+    obj.feedback != null ? sanitizeFeedback(obj.feedback) : current.feedback;
+
+  const knownIds = new Set([
+    ...texts.map((text) => text.id),
+    ...READING_LIBRARY_TEXTS.map((text) => text.id),
+  ]);
+  const activeTextId =
+    typeof obj.activeTextId === "string" && knownIds.has(obj.activeTextId)
+      ? obj.activeTextId
+      : current.activeTextId;
+
+  return { texts, activeTextId, feedback };
 }

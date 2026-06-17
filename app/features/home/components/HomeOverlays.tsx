@@ -57,6 +57,7 @@ type Props = {
   onDownloadSession: (id: string) => void;
   onExportJournal: () => void;
   onImportJournal: (file: File) => void;
+  canExportJournal?: boolean;
   saveDialogSession: SavedSession | null;
   onSaveDialogClose: () => void;
   practiceActiveSheetOpen: boolean;
@@ -120,6 +121,7 @@ export function HomeOverlays({
   onDownloadSession,
   onExportJournal,
   onImportJournal,
+  canExportJournal,
   saveDialogSession,
   onSaveDialogClose,
   practiceActiveSheetOpen,
@@ -188,6 +190,7 @@ export function HomeOverlays({
         onDownload={onDownloadSession}
         onExport={onExportJournal}
         onImport={onImportJournal}
+        canExport={canExportJournal}
       />
       <JournalSaveDialog
         session={saveDialogSession}

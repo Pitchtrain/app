@@ -37,6 +37,7 @@ type Props = {
   onDownload: (id: string) => void;
   onExport: () => void;
   onImport: (file: File) => void;
+  canExport?: boolean;
 };
 
 export function JournalPanel({
@@ -54,6 +55,7 @@ export function JournalPanel({
   onDownload,
   onExport,
   onImport,
+  canExport,
 }: Props) {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -121,7 +123,7 @@ export function JournalPanel({
                     size="sm"
                     variant="outline"
                     onClick={onExport}
-                    disabled={sessions.length === 0}
+                    disabled={!(canExport ?? sessions.length > 0)}
                     className="h-8 w-full justify-center gap-1.5 rounded-full px-2 text-xs sm:px-3 lg:w-8 lg:px-0"
                     aria-label={t("journal.exportJournal")}
                   >

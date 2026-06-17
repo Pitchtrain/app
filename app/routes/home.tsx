@@ -72,6 +72,8 @@ export default function Home() {
     activeSessionId,
     setActiveSessionId,
     loadSavedSession: recording.loadSavedSession,
+    readingSettings: reading.readingSettings,
+    setReadingSettings: reading.setReadingSettings,
   });
   const display = usePitchDisplayModel({
     t,
@@ -251,6 +253,7 @@ export default function Home() {
           onDownloadSession={(id) => void journal.handleDownloadSessionById(id)}
           onExportJournal={() => void journal.handleExportJournal()}
           onImportJournal={(file) => void journal.handleImportJournal(file)}
+          canExportJournal={journal.canExportJournal}
           journalSessionCount={journal.journalSessions.length}
           onClearAllJournal={() => void journal.handleClearAllSessions()}
           readingSettings={reading.readingSettings}
@@ -307,6 +310,7 @@ export default function Home() {
         onDownloadSession={(id) => void journal.handleDownloadSessionById(id)}
         onExportJournal={() => void journal.handleExportJournal()}
         onImportJournal={(file) => void journal.handleImportJournal(file)}
+        canExportJournal={journal.canExportJournal}
         saveDialogSession={journal.saveDialogSession}
         onSaveDialogClose={() => journal.setSaveDialogSession(null)}
         practiceActiveSheetOpen={practice.practiceActiveSheetOpen}

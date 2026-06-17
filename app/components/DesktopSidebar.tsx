@@ -75,6 +75,7 @@ type Props = {
     onDownloadSession: (id: string) => void;
     onExportJournal: () => void;
     onImportJournal: (file: File) => void;
+    canExportJournal?: boolean;
     journalSessionCount: number;
     onClearAllJournal: () => void;
     readingSettings: ReadingSettings;
@@ -122,6 +123,7 @@ export function DesktopSidebar({
     onDeleteSession,
     onDownloadSession,
     onExportJournal,
+    canExportJournal,
     onImportJournal,
     journalSessionCount,
     onClearAllJournal,
@@ -193,6 +195,7 @@ export function DesktopSidebar({
                             onDownload={onDownloadSession}
                             onExport={onExportJournal}
                             onImport={onImportJournal}
+                            canExport={canExportJournal}
                         />
                     ) : panel === "reading" ? (
                         <ReadingOptionsPanel

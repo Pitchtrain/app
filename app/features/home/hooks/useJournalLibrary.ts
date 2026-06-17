@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 import type { TFunction } from "i18next";
-import type { JournalTag, RecordingSession, SavedSession } from "~/types";
+import type {
+  JournalTag,
+  ReadingSettings,
+  RecordingSession,
+  SavedSession,
+} from "~/types";
+import { buildReadingArchive, mergeReadingArchive } from "~/reading";
+import {
+  loadLibraryFilters,
+  sanitizeLibraryFilters,
+  saveLibraryFilters,
+} from "~/readingLibraryFilters";
 import {
   bulkPut,
   bulkPutTags,
@@ -31,6 +43,8 @@ type Args = {
   activeSessionId: string | null;
   setActiveSessionId: (id: string | null) => void;
   loadSavedSession: (session: SavedSession) => void;
+  readingSettings: ReadingSettings;
+  setReadingSettings: Dispatch<SetStateAction<ReadingSettings>>;
 };
 
 export function useJournalLibrary({
@@ -39,6 +53,8 @@ export function useJournalLibrary({
   activeSessionId,
   setActiveSessionId,
   loadSavedSession,
+  readingSettings,
+  setReadingSettings,
 }: Args) {
   const [journalSessions, setJournalSessions] = useState<SavedSession[]>([]);
   const [journalTags, setJournalTags] = useState<JournalTag[]>([]);
@@ -213,9 +229,13 @@ export function useJournalLibrary({
   }
 
   async function handleExportJournal() {
-    if (journalSessions.length === 0) return;
+    const reading = {
+      ...buildReadingArchive(readingSettings),
+      libraryFilters: loadLibraryFilters(),
+    };
+    if (journalSessions.length === 0 && reading.texts.length === 0) return;
     try {
-      const blob = await exportJournal(journalSessions, journalTags);
+      const blob = await exportJournal(journalSessions, journalTags, reading);
       const url = URL.createObjectURL(blob);
       const stamp = new Date().toISOString().slice(0, 10);
       const anchor = document.createElement("a");
@@ -234,10 +254,25 @@ export function useJournalLibrary({
   async function handleImportJournal(file: File) {
     try {
       const imported = await importJournal(file);
-      if (imported.sessions.length === 0) {
+      const readingTextCount = Array.isArray(imported.reading?.texts)
+        ? imported.reading.texts.length
+        : 0;
+      if (imported.sessions.length === 0 && readingTextCount === 0) {
         toast.info(t("journal.archiveEmpty"));
         return;
       }
+
+      if (imported.reading) {
+        setReadingSettings((prev) =>
+          mergeReadingArchive(prev, imported.reading),
+        );
+        if (imported.reading.libraryFilters != null) {
+          saveLibraryFilters(
+            sanitizeLibraryFilters(imported.reading.libraryFilters),
+          );
+        }
+      }
+
       await bulkPutTags(imported.tags);
       await bulkPut(imported.sessions);
       const [mergedSessions, mergedTags] = await Promise.all([
@@ -274,7 +309,12 @@ export function useJournalLibrary({
     }
   }
 
+  const canExportJournal =
+    journalSessions.length > 0 ||
+    buildReadingArchive(readingSettings).texts.length > 0;
+
   return {
+    canExportJournal,
     journalSessions,
     journalTags,
     journalDrawerOpen,

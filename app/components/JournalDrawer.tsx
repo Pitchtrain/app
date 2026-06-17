@@ -26,6 +26,7 @@ type Props = {
   onDownload: (id: string) => void;
   onExport: () => void;
   onImport: (file: File) => void;
+  canExport?: boolean;
 };
 
 export function JournalDrawer({
@@ -45,6 +46,7 @@ export function JournalDrawer({
   onDownload,
   onExport,
   onImport,
+  canExport,
 }: Props) {
   const { t } = useTranslation();
   return (
@@ -75,6 +77,7 @@ export function JournalDrawer({
             onDownload={onDownload}
             onExport={onExport}
             onImport={onImport}
+            canExport={canExport}
           />
         </div>
       </DrawerContent>

@@ -1,8 +1,22 @@
 import JSZip from "jszip";
-import type { JournalTag, SavedSession, VoiceRange } from "../types";
+import type {
+  JournalTag,
+  ReadingFeedbackSettings,
+  ReadingText,
+  SavedSession,
+  VoiceRange,
+} from "../types";
+import type { LibraryFilters } from "../readingLibraryFilters";
 import { parseSamplesCSV, samplesToCSV } from "./csv";
 
 const MANIFEST_VERSION = 1;
+
+export type ReadingArchive = {
+  texts: ReadingText[];
+  activeTextId: string | null;
+  feedback: ReadingFeedbackSettings;
+  libraryFilters?: LibraryFilters;
+};
 
 type ManifestEntry = {
   id: string;
@@ -20,6 +34,7 @@ type Manifest = {
   version: number;
   sessions: ManifestEntry[];
   tags?: JournalTag[];
+  reading?: ReadingArchive;
 };
 
 export function extensionForMimeType(mime: string): string {
@@ -32,6 +47,7 @@ export function extensionForMimeType(mime: string): string {
 export async function exportJournal(
   sessions: SavedSession[],
   tags: JournalTag[] = [],
+  reading?: ReadingArchive,
 ): Promise<Blob> {
   const zip = new JSZip();
   const audioDir = zip.folder("audio");
@@ -64,6 +80,7 @@ export async function exportJournal(
     version: MANIFEST_VERSION,
     sessions: entries,
     tags,
+    ...(reading ? { reading } : {}),
   };
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
 
@@ -73,6 +90,7 @@ export async function exportJournal(
 export async function importJournal(file: Blob): Promise<{
   sessions: SavedSession[];
   tags: JournalTag[];
+  reading: ReadingArchive | null;
 }> {
   const zip = await JSZip.loadAsync(file);
   const manifestEntry = zip.file("manifest.json");
@@ -110,5 +128,9 @@ export async function importJournal(file: Blob): Promise<{
   return {
     sessions,
     tags: Array.isArray(manifest.tags) ? manifest.tags : [],
+    reading:
+      manifest.reading && typeof manifest.reading === "object"
+        ? manifest.reading
+        : null,
   };
 }

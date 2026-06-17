@@ -21,20 +21,25 @@ export const DEFAULT_LIBRARY_FILTERS: LibraryFilters = {
 const LOCALE_VALUES: LibraryLocaleFilter[] = ["all", "en", "de"];
 const KIND_VALUES: LibraryKindFilter[] = ["all", "dialog", "text"];
 
+export function sanitizeLibraryFilters(raw: unknown): LibraryFilters {
+  if (!raw || typeof raw !== "object") return { ...DEFAULT_LIBRARY_FILTERS };
+  const parsed = raw as Partial<LibraryFilters>;
+  return {
+    locale: LOCALE_VALUES.includes(parsed.locale as LibraryLocaleFilter)
+      ? (parsed.locale as LibraryLocaleFilter)
+      : DEFAULT_LIBRARY_FILTERS.locale,
+    kind: KIND_VALUES.includes(parsed.kind as LibraryKindFilter)
+      ? (parsed.kind as LibraryKindFilter)
+      : DEFAULT_LIBRARY_FILTERS.kind,
+  };
+}
+
 export function loadLibraryFilters(): LibraryFilters {
   if (typeof window === "undefined") return { ...DEFAULT_LIBRARY_FILTERS };
   try {
     const raw = window.localStorage.getItem(STORAGE_KEYS.libraryFilters);
     if (!raw) return { ...DEFAULT_LIBRARY_FILTERS };
-    const parsed = JSON.parse(raw) as Partial<LibraryFilters>;
-    return {
-      locale: LOCALE_VALUES.includes(parsed.locale as LibraryLocaleFilter)
-        ? (parsed.locale as LibraryLocaleFilter)
-        : DEFAULT_LIBRARY_FILTERS.locale,
-      kind: KIND_VALUES.includes(parsed.kind as LibraryKindFilter)
-        ? (parsed.kind as LibraryKindFilter)
-        : DEFAULT_LIBRARY_FILTERS.kind,
-    };
+    return sanitizeLibraryFilters(JSON.parse(raw));
   } catch {
     return { ...DEFAULT_LIBRARY_FILTERS };
   }
