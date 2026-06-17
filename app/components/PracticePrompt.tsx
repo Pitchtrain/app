@@ -84,17 +84,11 @@ export function PracticePrompt({
     }, [autoAdvanceEnabled, autoAdvanceSeconds, hasPool]);
 
     const activeCount = activeSetIds.length;
-    const feedbackColor =
-        feedbackDirection === "above"
-            ? "rgba(215, 121, 97, 0.58)"
-            : feedbackDirection === "below"
-                ? "rgba(62, 124, 142, 0.52)"
-                : "transparent";
     const feedbackFadeColor =
         feedbackDirection === "above"
-            ? "rgba(215, 121, 97, 0.22)"
+            ? "rgba(215, 121, 97, 0.4)"
             : feedbackDirection === "below"
-                ? "rgba(62, 124, 142, 0.2)"
+                ? "rgba(63, 118, 134, 0.5)"
                 : "transparent";
 
     return (
@@ -105,10 +99,7 @@ export function PracticePrompt({
                     feedbackDirection ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
-                    boxShadow: [
-                        `inset 0 0 12px 8px ${feedbackColor}`,
-                        `inset 0 0 24px 12px ${feedbackFadeColor}`,
-                    ].join(", "),
+                    boxShadow: `inset 0 0 10px 6px ${feedbackFadeColor}`,
                 }}
             />
             <div className="relative z-10 flex items-center gap-2 md:gap-3">
