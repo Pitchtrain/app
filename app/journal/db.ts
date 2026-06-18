@@ -36,7 +36,7 @@ export async function listSessions(): Promise<SavedSession[]> {
     const store = tx.objectStore(SESSIONS_STORE);
     const request = store.getAll();
     request.onsuccess = () => {
-      const items = (request.result as SavedSession[]).map(normalizeSession);
+      const items = (request.result as (DbSession | SavedSession)[]).map(dbToSession);
       items.sort((a, b) => b.createdAt - a.createdAt);
       resolve(items);
     };
@@ -52,7 +52,7 @@ export async function getSession(id: string): Promise<SavedSession | null> {
     const tx = db.transaction(SESSIONS_STORE, "readonly");
     const request = tx.objectStore(SESSIONS_STORE).get(id);
     request.onsuccess = () =>
-      resolve(request.result ? normalizeSession(request.result as SavedSession) : null);
+      resolve(request.result ? dbToSession(request.result as DbSession | SavedSession) : null);
     request.onerror = () => reject(request.error);
     tx.oncomplete = () => db.close();
   });
@@ -61,9 +61,10 @@ export async function getSession(id: string): Promise<SavedSession | null> {
 export async function putSession(session: SavedSession): Promise<void> {
   if (!isBrowser()) return;
   const db = await openDb();
+  const dbSession = await sessionToDb(session);
   return new Promise((resolve, reject) => {
     const tx = db.transaction(SESSIONS_STORE, "readwrite");
-    tx.objectStore(SESSIONS_STORE).put(normalizeSession(session));
+    tx.objectStore(SESSIONS_STORE).put(dbSession);
     tx.oncomplete = () => {
       db.close();
       resolve();
@@ -106,11 +107,12 @@ export async function clearSessions(): Promise<void> {
 export async function bulkPut(sessions: SavedSession[]): Promise<void> {
   if (!isBrowser() || sessions.length === 0) return;
   const db = await openDb();
+  const dbSessions = await Promise.all(sessions.map(sessionToDb));
   return new Promise((resolve, reject) => {
     const tx = db.transaction(SESSIONS_STORE, "readwrite");
     const store = tx.objectStore(SESSIONS_STORE);
-    for (const session of sessions) {
-      store.put(normalizeSession(session));
+    for (const session of dbSessions) {
+      store.put(session);
     }
     tx.oncomplete = () => {
       db.close();
@@ -196,6 +198,33 @@ export async function deleteTag(id: string): Promise<void> {
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
   });
+}
+
+// Safari cannot serialize Blob into IndexedDB — store as ArrayBuffer instead.
+type DbSession = Omit<SavedSession, "audioBlob"> & { audioData: ArrayBuffer };
+
+async function sessionToDb(session: SavedSession): Promise<DbSession> {
+  const { audioBlob, ...rest } = session;
+  const audioData = await audioBlob.arrayBuffer();
+  return {
+    ...rest,
+    tagIds: Array.isArray(rest.tagIds) ? rest.tagIds : [],
+    audioData,
+  };
+}
+
+function dbToSession(raw: DbSession | SavedSession): SavedSession {
+  // Handle both new ArrayBuffer format and legacy Blob format (Chrome/Firefox).
+  if ("audioData" in raw && raw.audioData instanceof ArrayBuffer) {
+    const { audioData, ...rest } = raw as DbSession;
+    return {
+      ...rest,
+      tagIds: Array.isArray(rest.tagIds) ? rest.tagIds : [],
+      audioBlob: new Blob([audioData], { type: rest.audioMimeType || "audio/webm" }),
+    };
+  }
+  const s = raw as SavedSession;
+  return { ...s, tagIds: Array.isArray(s.tagIds) ? s.tagIds : [] };
 }
 
 function normalizeSession(session: SavedSession): SavedSession {

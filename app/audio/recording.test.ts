@@ -1,54 +1,64 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { bitrateForMimeType, pickRecordingMimeType } from "./recording";
+import { createMonoRecorder } from "./recording";
 
-function mockMediaRecorder(supported: string[]) {
-  const stub = {
-    isTypeSupported: (mime: string) => supported.includes(mime),
-  } as unknown as typeof MediaRecorder;
-  vi.stubGlobal("MediaRecorder", stub);
+type StubDestination = {
+  channelCount: number;
+  channelCountMode: string;
+  channelInterpretation: string;
+  stream: MediaStream;
+};
+
+function setupAudioContext() {
+  const destination: StubDestination = {
+    channelCount: 2,
+    channelCountMode: "max",
+    channelInterpretation: "speakers",
+    stream: {} as MediaStream,
+  };
+  const source = { connect: vi.fn() } as unknown as AudioNode;
+  const audioContext = {
+    createMediaStreamDestination: () => destination,
+  } as unknown as AudioContext;
+
+  const recorderCalls: Array<{ stream: MediaStream; options?: MediaRecorderOptions }> =
+    [];
+  const recorderStub = vi
+    .fn()
+    .mockImplementation((stream: MediaStream, options?: MediaRecorderOptions) => {
+      recorderCalls.push({ stream, options });
+      return { stream, options } as unknown as MediaRecorder;
+    });
+  vi.stubGlobal("MediaRecorder", recorderStub);
+
+  return { audioContext, source, destination, recorderCalls };
 }
 
 afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("pickRecordingMimeType", () => {
-  it("prefers webm/opus when supported", () => {
-    mockMediaRecorder([
-      "audio/webm;codecs=opus",
-      "audio/mp4;codecs=mp4a.40.2",
-    ]);
-    expect(pickRecordingMimeType()).toBe("audio/webm;codecs=opus");
+describe("createMonoRecorder", () => {
+  it("forces a single discrete channel on the destination", () => {
+    const { audioContext, source, destination } = setupAudioContext();
+    createMonoRecorder(audioContext, source);
+    expect(destination.channelCount).toBe(1);
+    expect(destination.channelCountMode).toBe("explicit");
+    expect(destination.channelInterpretation).toBe("discrete");
   });
 
-  it("falls back to mp4/AAC on Safari", () => {
-    mockMediaRecorder(["audio/mp4;codecs=mp4a.40.2", "audio/mp4"]);
-    expect(pickRecordingMimeType()).toBe("audio/mp4;codecs=mp4a.40.2");
+  it("connects the source to the destination", () => {
+    const { audioContext, source, destination } = setupAudioContext();
+    createMonoRecorder(audioContext, source);
+    expect(source.connect).toHaveBeenCalledWith(destination);
   });
 
-  it("returns undefined when none supported", () => {
-    mockMediaRecorder([]);
-    expect(pickRecordingMimeType()).toBeUndefined();
-  });
-
-  it("returns undefined when MediaRecorder is unavailable", () => {
-    vi.stubGlobal("MediaRecorder", undefined);
-    expect(pickRecordingMimeType()).toBeUndefined();
-  });
-});
-
-describe("bitrateForMimeType", () => {
-  it("uses 32k for opus", () => {
-    expect(bitrateForMimeType("audio/webm;codecs=opus")).toBe(32_000);
-    expect(bitrateForMimeType("audio/ogg;codecs=opus")).toBe(32_000);
-  });
-
-  it("uses 56k for mp4/AAC", () => {
-    expect(bitrateForMimeType("audio/mp4;codecs=mp4a.40.2")).toBe(56_000);
-    expect(bitrateForMimeType("audio/mp4")).toBe(56_000);
-  });
-
-  it("defaults to 32k when mime is undefined", () => {
-    expect(bitrateForMimeType(undefined)).toBe(32_000);
+  it("records the destination stream at the mono bitrate, no forced mimeType", () => {
+    const { audioContext, source, destination, recorderCalls } =
+      setupAudioContext();
+    createMonoRecorder(audioContext, source);
+    expect(recorderCalls).toHaveLength(1);
+    expect(recorderCalls[0].stream).toBe(destination.stream);
+    expect(recorderCalls[0].options).toEqual({ audioBitsPerSecond: 48_000 });
+    expect(recorderCalls[0].options).not.toHaveProperty("mimeType");
   });
 });
