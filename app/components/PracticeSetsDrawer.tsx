@@ -75,7 +75,7 @@ export function PracticeSetsPanel({
 
   function deleteSet(id: string) {
     const target = sets.find((s) => s.id === id);
-    if (!target || target.isBuiltIn) return;
+    if (!target) return;
     if (!window.confirm(t("practice.deleteSetConfirm", { label: target.label }))) return;
     onChange(
       sets.filter((s) => s.id !== id),
@@ -376,17 +376,15 @@ function SetRow({
         >
           <PencilIcon className="size-4" />
         </Button>
-        {!set.isBuiltIn ? (
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={onDelete}
-            aria-label={t("practice.deleteSet", { label: set.label })}
-            className="text-slate-400 hover:text-destructive"
-          >
-            <TrashIcon className="size-4" />
-          </Button>
-        ) : null}
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onDelete}
+          aria-label={t("practice.deleteSet", { label: set.label })}
+          className="text-slate-400 hover:text-destructive"
+        >
+          <TrashIcon className="size-4" />
+        </Button>
       </div>
     </div>
   );
@@ -450,16 +448,14 @@ function SetEditor({
           <CheckIcon className="size-4" />
           {t("common.save")}
         </Button>
-        {!set.isBuiltIn ? (
-          <Button
-            variant="outline"
-            onClick={onDelete}
-            className="h-11 gap-1.5 rounded-full border-coral/30 text-coral hover:bg-coral/10"
-          >
-            <TrashIcon className="size-4" />
-            {t("practice.delete")}
-          </Button>
-        ) : null}
+        <Button
+          variant="outline"
+          onClick={onDelete}
+          className="h-11 gap-1.5 rounded-full border-coral/30 text-coral hover:bg-coral/10"
+        >
+          <TrashIcon className="size-4" />
+          {t("practice.delete")}
+        </Button>
       </div>
     </div>
   );
