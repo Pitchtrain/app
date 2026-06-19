@@ -4,11 +4,13 @@ import { toast } from "sonner";
 import type { TFunction } from "i18next";
 import type {
   JournalTag,
+  PracticeSettings,
   ReadingSettings,
   RecordingSession,
   SavedSession,
 } from "~/types";
 import { buildReadingArchive, mergeReadingArchive } from "~/reading";
+import { buildPracticeArchive, mergePracticeSets } from "~/practice";
 import {
   loadLibraryFilters,
   sanitizeLibraryFilters,
@@ -46,6 +48,8 @@ type Args = {
   loadSavedSession: (session: SavedSession) => void;
   readingSettings: ReadingSettings;
   setReadingSettings: Dispatch<SetStateAction<ReadingSettings>>;
+  practiceSettings: PracticeSettings;
+  setPracticeSettings: Dispatch<SetStateAction<PracticeSettings>>;
 };
 
 export function useJournalLibrary({
@@ -56,6 +60,8 @@ export function useJournalLibrary({
   loadSavedSession,
   readingSettings,
   setReadingSettings,
+  practiceSettings,
+  setPracticeSettings,
 }: Args) {
   const [journalSessions, setJournalSessions] = useState<SavedSession[]>([]);
   const [journalTags, setJournalTags] = useState<JournalTag[]>([]);
@@ -282,9 +288,20 @@ export function useJournalLibrary({
       ...buildReadingArchive(readingSettings),
       libraryFilters: loadLibraryFilters(),
     };
-    if (journalSessions.length === 0 && reading.texts.length === 0) return;
+    const practiceSets = buildPracticeArchive(practiceSettings);
+    if (
+      journalSessions.length === 0 &&
+      reading.texts.length === 0 &&
+      practiceSets.length === 0
+    )
+      return;
     try {
-      const blob = await exportJournal(journalSessions, journalTags, reading);
+      const blob = await exportJournal(
+        journalSessions,
+        journalTags,
+        reading,
+        practiceSets,
+      );
       const url = URL.createObjectURL(blob);
       const stamp = new Date().toISOString().slice(0, 10);
       const anchor = document.createElement("a");
@@ -306,7 +323,12 @@ export function useJournalLibrary({
       const readingTextCount = Array.isArray(imported.reading?.texts)
         ? imported.reading.texts.length
         : 0;
-      if (imported.sessions.length === 0 && readingTextCount === 0) {
+      const practiceSetCount = imported.practiceSets?.length ?? 0;
+      if (
+        imported.sessions.length === 0 &&
+        readingTextCount === 0 &&
+        practiceSetCount === 0
+      ) {
         toast.info(t("journal.archiveEmpty"));
         return;
       }
@@ -320,6 +342,12 @@ export function useJournalLibrary({
             sanitizeLibraryFilters(imported.reading.libraryFilters),
           );
         }
+      }
+
+      if (imported.practiceSets) {
+        setPracticeSettings((prev) =>
+          mergePracticeSets(prev, imported.practiceSets),
+        );
       }
 
       await bulkPutTags(imported.tags);
@@ -360,7 +388,8 @@ export function useJournalLibrary({
 
   const canExportJournal =
     journalSessions.length > 0 ||
-    buildReadingArchive(readingSettings).texts.length > 0;
+    buildReadingArchive(readingSettings).texts.length > 0 ||
+    buildPracticeArchive(practiceSettings).length > 0;
 
   return {
     canExportJournal,

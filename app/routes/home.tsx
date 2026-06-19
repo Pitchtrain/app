@@ -74,6 +74,8 @@ export default function Home() {
     loadSavedSession: recording.loadSavedSession,
     readingSettings: reading.readingSettings,
     setReadingSettings: reading.setReadingSettings,
+    practiceSettings: practice.practiceSettings,
+    setPracticeSettings: practice.setPracticeSettings,
   });
   const display = usePitchDisplayModel({
     t,

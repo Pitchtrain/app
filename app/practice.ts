@@ -117,7 +117,7 @@ function getDefaultSettings(): PracticeSettings {
     };
 }
 
-function sanitizeSet(raw: unknown): PracticeSet | null {
+export function sanitizeSet(raw: unknown): PracticeSet | null {
     if (!raw || typeof raw !== "object") return null;
     const obj = raw as Record<string, unknown>;
     if (typeof obj.id !== "string" || typeof obj.label !== "string") return null;
@@ -193,4 +193,30 @@ export function loadPracticeSettings(): PracticeSettings {
 export function savePracticeSettings(settings: PracticeSettings) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEYS.practiceSettings, JSON.stringify(settings));
+}
+
+// Own (non-built-in) practice sets, for the journal archive.
+export function buildPracticeArchive(settings: PracticeSettings): PracticeSet[] {
+    return settings.sets.filter((set) => !set.isBuiltIn);
+}
+
+// Merge imported sets into current settings: add new own sets (by id).
+export function mergePracticeSets(
+    current: PracticeSettings,
+    imported: unknown,
+): PracticeSettings {
+    if (!Array.isArray(imported)) return current;
+    const importedSets: PracticeSet[] = [];
+    for (const entry of imported) {
+        const cleaned = sanitizeSet(entry);
+        if (cleaned && !cleaned.isBuiltIn) importedSets.push(cleaned);
+    }
+    const existingIds = new Set(current.sets.map((s) => s.id));
+    const newSets = importedSets.filter((s) => !existingIds.has(s.id));
+    if (newSets.length === 0) return current;
+    return {
+        ...current,
+        sets: [...current.sets, ...newSets],
+        activeSetIds: [...current.activeSetIds, ...newSets.map((s) => s.id)],
+    };
 }

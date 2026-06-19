@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 import type {
   JournalTag,
+  PracticeSet,
   ReadingFeedbackSettings,
   ReadingText,
   SavedSession,
@@ -35,6 +36,7 @@ type Manifest = {
   sessions: ManifestEntry[];
   tags?: JournalTag[];
   reading?: ReadingArchive;
+  practiceSets?: PracticeSet[];
 };
 
 export function extensionForMimeType(mime: string): string {
@@ -48,6 +50,7 @@ export async function exportJournal(
   sessions: SavedSession[],
   tags: JournalTag[] = [],
   reading?: ReadingArchive,
+  practiceSets?: PracticeSet[],
 ): Promise<Blob> {
   const zip = new JSZip();
   const audioDir = zip.folder("audio");
@@ -81,6 +84,7 @@ export async function exportJournal(
     sessions: entries,
     tags,
     ...(reading ? { reading } : {}),
+    ...(practiceSets && practiceSets.length > 0 ? { practiceSets } : {}),
   };
   zip.file("manifest.json", JSON.stringify(manifest, null, 2));
 
@@ -91,6 +95,7 @@ export async function importJournal(file: Blob): Promise<{
   sessions: SavedSession[];
   tags: JournalTag[];
   reading: ReadingArchive | null;
+  practiceSets: PracticeSet[] | null;
 }> {
   const zip = await JSZip.loadAsync(file);
   const manifestEntry = zip.file("manifest.json");
@@ -132,5 +137,8 @@ export async function importJournal(file: Blob): Promise<{
       manifest.reading && typeof manifest.reading === "object"
         ? manifest.reading
         : null,
+    practiceSets: Array.isArray(manifest.practiceSets)
+      ? manifest.practiceSets
+      : null,
   };
 }
