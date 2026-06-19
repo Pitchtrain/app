@@ -60,8 +60,8 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed z-50 flex flex-col bg-popover text-popover-foreground shadow-lg",
-          "inset-0 h-full w-full sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[min(92vw,38rem)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border",
+          "fixed z-50 flex flex-col overscroll-contain bg-popover text-popover-foreground shadow-lg",
+          "inset-0 h-dvh w-full sm:inset-auto sm:top-1/2 sm:left-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[min(92vw,38rem)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border",
           "data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 duration-200",
           className
         )}
