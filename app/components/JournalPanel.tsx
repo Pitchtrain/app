@@ -175,17 +175,15 @@ export function JournalPanel({
               </span>
             </button>
           ))}
-          {tags.length > 0 && (
-            <Button
-              size="icon-sm"
-              variant="outline"
-              onClick={() => setTagManagerOpen(true)}
-              aria-label={t("journal.manageTags")}
-              className="size-8 shrink-0 rounded-full"
-            >
-              <SettingsIcon className="size-3.5" />
-            </Button>
-          )}
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={() => setTagManagerOpen(true)}
+            aria-label={t("journal.manageTags")}
+            className="size-8 shrink-0 rounded-full"
+          >
+            <SettingsIcon className="size-3.5" />
+          </Button>
         </div>
       </div>
       <JournalTagManager

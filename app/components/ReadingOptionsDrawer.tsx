@@ -669,20 +669,18 @@ function ReadingEditor({
       />
       <div className="flex flex-wrap gap-1.5">
         <Button
-          size="sm"
           onClick={commit}
-          className="h-8 gap-1.5 rounded-full bg-ink text-xs text-white hover:bg-ink/90"
+          className="h-11 gap-1.5 rounded-full bg-ink text-white hover:bg-ink/90"
         >
-          <CheckIcon className="size-3.5" />
+          <CheckIcon className="size-4" />
           {t("common.save")}
         </Button>
         <Button
           variant="outline"
-          size="sm"
           onClick={onDelete}
-          className="h-8 gap-1.5 rounded-full border-coral/30 text-xs text-coral hover:bg-coral/10"
+          className="h-11 gap-1.5 rounded-full border-coral/30 text-coral hover:bg-coral/10"
         >
-          <TrashIcon className="size-3.5" />
+          <TrashIcon className="size-4" />
           {t("reading.delete")}
         </Button>
       </div>
