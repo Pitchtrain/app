@@ -116,31 +116,73 @@ export function HomeChartPanel({
           </Button>
         </div>
         {isReadingMode ? (
-          <div className="flex items-center gap-0.5 rounded-full bg-white/85 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onLeaveReadingMode}
-              aria-label={t("sidebar.practice")}
-              aria-pressed={!isReadingMode}
-              className="size-11 rounded-full text-gray-500"
-            >
-              <SquareActivityIcon className="size-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onEnterReadingMode}
-              aria-label={t("reading.enter")}
-              aria-pressed={isReadingMode}
-              className="size-11 rounded-full bg-gray-100 text-ink hover:bg-gray-100"
-            >
-              <BookOpenTextIcon className="size-5" />
-            </Button>
-          </div>
+          <>
+            <div className="flex items-center gap-1 rounded-full bg-white/80 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenSettings}
+                aria-label={t("common.settings")}
+                className="size-11"
+              >
+                <SettingsIcon className="size-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenJournal}
+                aria-label={t("journal.tab")}
+                className="size-11"
+              >
+                <BookMarkedIcon className="size-5" />
+              </Button>
+            </div>
+            <div className="flex items-center gap-0.5 rounded-full bg-white/85 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onLeaveReadingMode}
+                aria-label={t("sidebar.practice")}
+                aria-pressed={!isReadingMode}
+                className="size-11 rounded-full text-gray-500"
+              >
+                <SquareActivityIcon className="size-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onEnterReadingMode}
+                aria-label={t("reading.enter")}
+                aria-pressed={isReadingMode}
+                className="size-11 rounded-full bg-gray-100 text-ink hover:bg-gray-100"
+              >
+                <BookOpenTextIcon className="size-5" />
+              </Button>
+            </div>
+          </>
         ) : (
           <>
             <ChartModeToggle value={chartMode} onChange={onChartModeChange} />
+            <div className="flex items-center gap-1 rounded-full bg-white/80 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenSettings}
+                aria-label={t("common.settings")}
+                className="size-11"
+              >
+                <SettingsIcon className="size-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onOpenJournal}
+                aria-label={t("journal.tab")}
+                className="size-11"
+              >
+                <BookMarkedIcon className="size-5" />
+              </Button>
+            </div>
             <div className="flex items-center gap-0.5 rounded-full bg-white/80 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
               <Button
                 variant="ghost"
@@ -161,26 +203,6 @@ export function HomeChartPanel({
                 className="size-11 rounded-full text-gray-500"
               >
                 <BookOpenTextIcon className="size-5" />
-              </Button>
-            </div>
-            <div className="flex items-center gap-1 rounded-full bg-white/80 p-0.5 shadow-sm backdrop-blur-sm lg:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onOpenJournal}
-                aria-label={t("journal.tab")}
-                className="size-11"
-              >
-                <BookMarkedIcon className="size-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onOpenSettings}
-                aria-label={t("common.settings")}
-                className="size-11"
-              >
-                <SettingsIcon className="size-5" />
               </Button>
             </div>
           </>
