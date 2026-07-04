@@ -1,1 +1,1 @@
-no visual verifies unless instructed
+@AGENTS.md

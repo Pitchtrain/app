@@ -42,8 +42,7 @@ are stored in your browser and can be named and saved to your journal.
 ### 🗣️ Detail Mode
 
 Work through short prompts and tongue twisters one at a time, grouped into sets. Create your own sets, import a .txt file, or edit
-the built-in default set. Sets support auto-advance (1–120 second timer) and shuffle mode, so you can focus on speaking rather than
-managing the interface.
+the built-in default set. Sets support auto-advance (1–120 second timer) and shuffle mode, so you can focus on speaking.
 
 ### 📖 Reading Mode
 
@@ -109,12 +108,8 @@ Output goes to `build/client` and is ready to be served as a static site.
 
 ### Deploying with Docker 🐳
 
-```bash
-docker compose up -d
-```
-
-The container serves the built app via Nginx. The included `docker-compose.yml` is configured to work with Traefik as a reverse
-proxy — update the host labels to match your domain.
+The container serves the built app via Nginx on port 80. Get it on `ghcr.io/pitchtrain/pitchtrain:latest`.  
+`latest` matches the deployed version on github.io while `main` offers the newest version.
 
 ---
 
@@ -137,7 +132,8 @@ proxy — update the host labels to match your domain.
 
 Contributions are welcome! If you're planning something significant, please open an issue first to discuss the approach.
 
-Please keep pull requests focused — one feature or fix per PR. Run `npm run format` before committing to keep formatting consistent.
+Please keep pull requests focused, one feature or fix per PR. Follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). Run `npm run format` before committing to keep formatting
+consistent.
 
 ---
 
