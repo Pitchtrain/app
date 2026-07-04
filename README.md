@@ -2,9 +2,9 @@
 
 Pitchtrain is an open-source, browser-based voice pitch trainer designed to support voice training practice. It gives you real-time
 visual feedback on your pitch, lets you set target frequency ranges, record and review sessions, and build a journal of your
-progress over time.
+progress over time. Available in English and German.
 
-The app is primarily built for transgender voice training, though it's useful for anyone working on pitch awareness and control —
+The app is primarily built for transgender voice training, though it's useful for anyone working on pitch awareness and control,
 including singers and voice actors.
 
 > ⚠️ **Pitchtrain is not a medical tool.** It does not diagnose, treat, or replace professional voice therapy. Please use it
@@ -16,7 +16,8 @@ including singers and voice actors.
 
 ## 🌐 App
 
-**[pitchtrain.github.io/app](https://pitchtrain.github.io/app)** also available via **[pitchtrain.github.io](https://pitchtrain.github.io)**
+**[pitchtrain.github.io/app](https://pitchtrain.github.io/app)** also available via *
+*[pitchtrain.github.io](https://pitchtrain.github.io)**
 
 ---
 
@@ -25,11 +26,11 @@ including singers and voice actors.
 ### 📊 Real-Time Pitch Detection
 
 Pitchtrain analyzes your microphone input live, displaying your current pitch in Hz alongside a scrolling timeline chart. Three
-detection algorithms are available — Macleod, YIN, and AMDF — so you can choose what works best for your voice and environment.
+detection algorithms are available (Macleod, YIN, and AMDF) so you can choose what works best for your voice and environment.
 
 ### 🎯 Voice Range Targets
 
-Set a target pitch range to practice toward. Built-in presets cover male (85–165 Hz), androgynous (165–180 Hz), and female (180–320
+Set a target pitch range to practice toward. Built-in presets cover male (85–145 Hz), androgynous (145–175 Hz), and female (175–275
 Hz) ranges, or you can define a custom range. The chart and status indicators show whether your pitch is within range, above it, or
 below it in real time.
 
@@ -40,13 +41,21 @@ are stored in your browser and can be named and saved to your journal.
 
 ### 🗣️ Detail Mode
 
-Work through tongue twisters or import your own custom practice text. Detail mode sets support auto-advance (1–120 second timer) and
-shuffle mode, so you can focus on speaking rather than managing the interface.
+Work through short prompts and tongue twisters one at a time, grouped into sets. Create your own sets, import a .txt file, or edit
+the built-in default set. Sets support auto-advance (1–120 second timer) and shuffle mode, so you can focus on speaking rather than
+managing the interface.
+
+### 📖 Reading Mode
+
+Read longer texts teleprompter-style. Use your own personal texts or pick from the built-in library (dialogs and texts in English
+and German). A soft glow around the text gives live feedback as your pitch drifts above or below your target, with a tunable
+feedback goal and threshold.
 
 ### 📓 Session Journal
 
-Save named sessions to a built-in journal backed by your browser's local storage. Export your full journal — including audio
-recordings and pitch data — as a ZIP archive. Import it back on any device or browser.
+Save named sessions to a built-in journal backed by your browser's local storage. Tag sessions with custom, color-coded labels and
+filter the journal by tag. Export your full journal, including audio recordings, pitch data, custom practice sets and reading texts,
+as a ZIP archive. Import it back on any device or browser.
 
 ### 📱 Progressive Web App
 
@@ -59,10 +68,10 @@ Pitchtrain can be installed directly from the browser and works offline. No app 
 All of your data stays on your device. Pitchtrain does not have a backend server, does not require an account, and does not transmit
 any data anywhere.
 
-- 🎵 **Recordings and pitch samples** are stored in your browser's IndexedDB under the key `pitchtrain-journal`.
-- ⚙️ **Settings** (range preferences, detector algorithm, practice configuration) are stored in localStorage.
-- 📦 **Exports** are ZIP files you download manually — they contain your audio recordings and pitch data as CSV files. These files
-  are yours entirely.
+- 🎵 **Recordings, pitch samples and journal tags** are stored in your browser's IndexedDB under the key `pitchtrain:journal`.
+- ⚙️ **Settings** (range preferences, detector algorithm, practice sets, reading texts, language) are stored in localStorage.
+- 📦 **Exports** are ZIP files you download manually — they contain your audio recordings, pitch data as CSV files, tags, custom
+  practice sets and reading texts in a manifest. These files are yours entirely.
 
 Clearing your browser data or uninstalling the PWA will remove all stored sessions.
 
@@ -116,7 +125,8 @@ proxy — update the host labels to match your domain.
 - **Styling:** Tailwind CSS 4 + Radix UI + shadcn/ui components
 - **Pitch Detection:** [pitchfinder](https://github.com/peterkhayes/pitchfinder) (YIN, AMDF, Macleod)
 - **Audio:** Web Audio API (microphone input, real-time analysis)
-- **Storage:** IndexedDB (sessions), localStorage (settings)
+- **i18n:** i18next + react-i18next (English, German)
+- **Storage:** IndexedDB (sessions, tags), localStorage (settings, custom sets and texts)
 - **Export:** JSZip (ZIP archives with audio + CSV)
 - **Build:** Vite + vite-plugin-pwa
 - **Deployment:** Docker + Nginx
