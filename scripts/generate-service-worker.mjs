@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { readdir, rm, writeFile } from "node:fs/promises";
+import { copyFile, readdir, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { getManifest } from "workbox-build";
 
@@ -34,6 +34,10 @@ const cacheRevision = createHash("sha256")
   .slice(0, 16);
 
 await writeFile(serviceWorkerPath, buildServiceWorker(BASE_PATH, cacheRevision, manifestEntries));
+
+// Static hosts without rewrite rules (e.g. GitHub Pages) serve 404.html for
+// unknown paths; a copy of the shell keeps deep links working there.
+await copyFile(appShell, resolve(clientBuildDirectory, "404.html"));
 
 for (const warning of warnings) {
   console.warn(warning);
@@ -85,9 +89,50 @@ self.addEventListener("activate", (event) => {
             .filter((cacheName) => cacheName !== CACHE_NAME)
             .map((cacheName) => caches.delete(cacheName)),
         ),
-      ),
+      )
+      .then(() => self.clients.claim()),
   );
 });
+
+self.addEventListener("message", (event) => {
+  const data = event.data;
+  if (!data || typeof data !== "object") return;
+
+  if (data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+    return;
+  }
+
+  if (data.type === "SKIP_WAITING_WHEN_HIDDEN") {
+    event.waitUntil(
+      self.clients
+        .matchAll({ type: "window", includeUncontrolled: true })
+        .then((clients) => {
+          if (clients.every((client) => client.visibilityState === "hidden")) {
+            return self.skipWaiting();
+          }
+        }),
+    );
+  }
+});
+
+// On flaky connections a navigation fetch can hang for minutes before
+// failing; fall back to the cached shell after this long instead.
+const NAVIGATION_TIMEOUT_MS = 4000;
+
+async function handleNavigation(request) {
+  const networkFetch = fetch(request);
+  const timedResponse = await Promise.race([
+    networkFetch.catch(() => undefined),
+    new Promise((resolve) => setTimeout(resolve, NAVIGATION_TIMEOUT_MS, undefined)),
+  ]);
+  if (timedResponse?.ok) return timedResponse;
+  // Timed out, network error, or an error status (static hosts return 404
+  // for client-routed paths) — serve the cached shell instead.
+  const shell = await caches.match(APP_SHELL_URL, { ignoreSearch: true });
+  if (shell) return shell;
+  return timedResponse ?? networkFetch;
+}
 
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -97,9 +142,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request).catch(() => caches.match(APP_SHELL_URL, { ignoreSearch: true })),
-    );
+    event.respondWith(handleNavigation(request));
     return;
   }
 

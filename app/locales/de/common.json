@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "{{appName}}",
-    "tagline": "Stimmlagen-Training-App"
+    "tagline": "Stimmlagen-Training-App",
+    "updateReady": "Eine neue Version ist verfügbar.",
+    "updateReload": "Neu laden"
   },
   "common": {
     "next": "Weiter",
