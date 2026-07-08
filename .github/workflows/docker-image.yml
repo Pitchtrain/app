@@ -65,7 +65,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Retag existing main image as latest
+        env:
+          OWNER: ${{ github.repository_owner }}
         run: |
+          owner_lc=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
           docker buildx imagetools create \
-            --tag ghcr.io/${{ github.repository_owner }}/pitchtrain:latest \
-            ghcr.io/${{ github.repository_owner }}/pitchtrain:main
+            --tag ghcr.io/$owner_lc/pitchtrain:latest \
+            ghcr.io/$owner_lc/pitchtrain:main
