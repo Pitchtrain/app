@@ -2,12 +2,12 @@ import {SiGithub} from "@icons-pack/react-simple-icons";
 import {
     BookMarkedIcon,
     BookOpenTextIcon,
+    CaseSensitiveIcon,
     ChevronDownIcon,
     ChevronsRightIcon,
     InfoIcon,
     SettingsIcon,
     SlidersHorizontalIcon,
-    TagsIcon,
 } from "lucide-react";
 import type {ReactNode} from "react";
 import {useTranslation} from "react-i18next";
@@ -275,7 +275,7 @@ function Rail({
                 label={t("sidebar.sets")}
                 active={panel === "sets"}
                 onClick={() => onPanelChange(panel === "sets" ? null : "sets")}
-                icon={<TagsIcon className="size-5"/>}
+                icon={<CaseSensitiveIcon className="size-5"/>}
             />
             <RailButton
                 label={t("sidebar.journal")}
