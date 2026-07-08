@@ -16,8 +16,7 @@ including singers and voice actors.
 
 ## 🌐 App
 
-**[pitchtrain.github.io/app](https://pitchtrain.github.io/app)** also available via *
-*[pitchtrain.github.io](https://pitchtrain.github.io)**
+**[pitchtrain.github.io](https://pitchtrain.github.io)** and **[pitchtrain.github.io/app](https://pitchtrain.github.io/app)**
 
 ---
 
@@ -98,6 +97,12 @@ The app will be available at `http://localhost:5173`.
 npm run typecheck
 ```
 
+### Running Tests
+
+```bash
+npm run test
+```
+
 ### Building for Production
 
 ```bash
@@ -132,8 +137,9 @@ The container serves the built app via Nginx on port 80. Get it on `ghcr.io/pitc
 
 Contributions are welcome! If you're planning something significant, please open an issue first to discuss the approach.
 
-Please keep pull requests focused, one feature or fix per PR. Follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). Run `npm run format` before committing to keep formatting
-consistent.
+Please keep pull requests focused, one feature or fix per PR.
+Follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). Run `npm run format` before committing to keep
+formatting consistent.
 
 ---
 
