@@ -113,6 +113,18 @@ export default function Home() {
     toast.success(t("reading.randomShown", { title: text.title }));
   }
 
+  function handleDesktopReadingSettingsChange(
+    next: typeof reading.readingSettings,
+  ) {
+    if (
+      next.activeTextId !== reading.readingSettings.activeTextId &&
+      !isReadingMode
+    ) {
+      reading.enterReadingMode();
+    }
+    reading.setReadingSettings(next);
+  }
+
   function openPracticeSets() {
     if (hasDesktopSidebar()) {
       setDesktopPanel("sets");
@@ -261,7 +273,7 @@ export default function Home() {
           journalSessionCount={journal.journalSessions.length}
           onClearAllJournal={() => void journal.handleClearAllSessions()}
           readingSettings={reading.readingSettings}
-          onReadingSettingsChange={reading.setReadingSettings}
+          onReadingSettingsChange={handleDesktopReadingSettingsChange}
         />
       </div>
 
