@@ -35,6 +35,7 @@ import {
 } from "~/journal/zip";
 import {
   createJournalTag,
+  mergeImportedTags,
   READING_SESSION_TAG_COLOR,
   READING_SESSION_TAG_LABEL,
 } from "~/journal/tags";
@@ -350,8 +351,22 @@ export function useJournalLibrary({
         );
       }
 
-      await bulkPutTags(imported.tags);
-      await bulkPut(imported.sessions);
+      const { tags: mergedTagList, idRemap } = mergeImportedTags(
+        journalTags,
+        imported.tags,
+      );
+      const newTags = mergedTagList.filter(
+        (tag) => !journalTags.some((existing) => existing.id === tag.id),
+      );
+      const remappedSessions = idRemap.size
+        ? imported.sessions.map((session) => ({
+            ...session,
+            tagIds: session.tagIds.map((id) => idRemap.get(id) ?? id),
+          }))
+        : imported.sessions;
+
+      await bulkPutTags(newTags);
+      await bulkPut(remappedSessions);
       const [mergedSessions, mergedTags] = await Promise.all([
         listSessions(),
         listTags(),

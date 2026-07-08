@@ -28,6 +28,28 @@ export function createJournalTag(label: string, color: string): JournalTag {
     };
 }
 
+export function mergeImportedTags(
+    existing: JournalTag[],
+    imported: JournalTag[],
+): { tags: JournalTag[]; idRemap: Map<string, string> } {
+    const tags = [...existing];
+    const byLabel = new Map(tags.map((tag) => [tag.label.trim().toLowerCase(), tag]));
+    const idRemap = new Map<string, string>();
+
+    for (const tag of imported) {
+        const key = tag.label.trim().toLowerCase();
+        const match = byLabel.get(key);
+        if (match) {
+            if (match.id !== tag.id) idRemap.set(tag.id, match.id);
+            continue;
+        }
+        byLabel.set(key, tag);
+        tags.push(tag);
+    }
+
+    return { tags, idRemap };
+}
+
 export function getTagSessionCounts(sessions: SavedSession[]) {
     const counts = new Map<string, number>();
     for (const session of sessions) {
