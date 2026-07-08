@@ -1,9 +1,7 @@
 {
   "app": {
     "name": "{{appName}}",
-    "tagline": "Stimmlagen-Training-App",
-    "updateReady": "Eine neue Version ist verfügbar.",
-    "updateReload": "Neu laden"
+    "tagline": "Stimmlagen-Training-App"
   },
   "common": {
     "next": "Weiter",
@@ -250,6 +248,13 @@
       "en": "Englisch",
       "de": "Deutsch"
     },
+    "libraryOrigins": {
+      "all": "Alle Quellen",
+      "ai": "KI",
+      "public-domain": "Gemeinfrei",
+      "cc0": "CC0"
+    },
+    "source": "Quelle",
     "activeText": "Aktiver Text",
     "titleLabel": "Texttitel",
     "bodyLabel": "Lesetext",

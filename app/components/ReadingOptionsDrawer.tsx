@@ -22,11 +22,13 @@ import {
   type ReadingSample,
 } from "~/readingSamples";
 import {
+  availableLibraryOrigins,
   filterLibraryTexts,
   loadLibraryFilters,
   saveLibraryFilters,
   type LibraryKindFilter,
   type LibraryLocaleFilter,
+  type LibraryOriginFilter,
 } from "~/readingLibraryFilters";
 import { Button } from "./ui/button";
 import {
@@ -37,12 +39,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "./ui/drawer";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 type Props = {
@@ -64,7 +61,9 @@ export function ReadingOptionsPanel({
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [editingTextId, setEditingTextId] = useState<string | null>(null);
-  const personalTexts = settings.texts.filter((text) => text.source !== "module");
+  const personalTexts = settings.texts.filter(
+    (text) => text.source !== "module",
+  );
 
   function setActiveTextId(activeTextId: string) {
     onChange({ ...settings, activeTextId });
@@ -95,10 +94,11 @@ export function ReadingOptionsPanel({
       return;
     }
     const texts = settings.texts.filter((text) => text.id !== target.id);
-    const nextPersonalText = texts.find((text) => text.source !== "module") ?? null;
+    const nextPersonalText =
+      texts.find((text) => text.source !== "module") ?? null;
     const activeTextId =
       settings.activeTextId === target.id
-        ? nextPersonalText?.id ?? READING_LIBRARY_TEXTS[0]?.id ?? null
+        ? (nextPersonalText?.id ?? READING_LIBRARY_TEXTS[0]?.id ?? null)
         : settings.activeTextId;
     onChange({ ...settings, texts, activeTextId });
     setEditingTextId((current) => (current === target.id ? null : current));
@@ -151,7 +151,8 @@ export function ReadingOptionsPanel({
     toast.success(t("reading.randomShown", { title: text.title }));
   }
 
-  const editingText = personalTexts.find((text) => text.id === editingTextId) ?? null;
+  const editingText =
+    personalTexts.find((text) => text.id === editingTextId) ?? null;
 
   return (
     <>
@@ -203,10 +204,15 @@ export function ReadingOptionsPanel({
         </TabsContent>
       </Tabs>
 
-      <Dialog open={editingText != null} onOpenChange={(next) => !next && setEditingTextId(null)}>
+      <Dialog
+        open={editingText != null}
+        onOpenChange={(next) => !next && setEditingTextId(null)}
+      >
         <DialogContent className="sm:h-[min(82vh,42rem)] sm:w-[min(92vw,42rem)]">
           <DialogHeader className="pr-14 text-left">
-            <DialogTitle>{editingText?.title ?? t("reading.drawerTitle")}</DialogTitle>
+            <DialogTitle>
+              {editingText?.title ?? t("reading.drawerTitle")}
+            </DialogTitle>
           </DialogHeader>
           <div className="min-h-0 flex-1 px-4 pb-6">
             {editingText ? (
@@ -327,14 +333,23 @@ function LibraryTextsSection({
   const [kindFilter, setKindFilter] = useState<LibraryKindFilter>(
     () => loadLibraryFilters().kind,
   );
+  const [originFilter, setOriginFilter] = useState<LibraryOriginFilter>(
+    () => loadLibraryFilters().origin,
+  );
+  const originValues = availableLibraryOrigins();
 
   useEffect(() => {
-    saveLibraryFilters({ locale: localeFilter, kind: kindFilter });
-  }, [localeFilter, kindFilter]);
+    saveLibraryFilters({
+      locale: localeFilter,
+      kind: kindFilter,
+      origin: originFilter,
+    });
+  }, [localeFilter, kindFilter, originFilter]);
 
   const filteredTexts = filterLibraryTexts({
     locale: localeFilter,
     kind: kindFilter,
+    origin: originFilter,
   });
 
   return (
@@ -390,6 +405,25 @@ function LibraryTextsSection({
             {t("reading.libraryKinds.text")}
           </LibraryFilterPill>
         </div>
+        {originValues.length > 1 ? (
+          <div className="flex flex-wrap gap-1.5">
+            <LibraryFilterPill
+              active={originFilter === "all"}
+              onClick={() => setOriginFilter("all")}
+            >
+              {t("reading.libraryOrigins.all")}
+            </LibraryFilterPill>
+            {originValues.map((value) => (
+              <LibraryFilterPill
+                key={value}
+                active={originFilter === value}
+                onClick={() => setOriginFilter(value)}
+              >
+                {t(`reading.libraryOrigins.${value}`)}
+              </LibraryFilterPill>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
@@ -428,7 +462,9 @@ export function ReadingOptionsDrawer({
       <DrawerContent className="h-[92dvh]">
         <DrawerHeader className="text-left">
           <DrawerTitle>{t("reading.drawerTitle")}</DrawerTitle>
-          <DrawerDescription>{t("reading.drawerDescription")}</DrawerDescription>
+          <DrawerDescription>
+            {t("reading.drawerDescription")}
+          </DrawerDescription>
         </DrawerHeader>
 
         {open ? (
@@ -541,13 +577,18 @@ function LibraryTextRow({
           className="min-w-0 flex-1 text-left"
         >
           <span className="flex min-w-0 items-center gap-2">
-            <span className="truncate font-medium text-slate-800" title={text.title}>
+            <span
+              className="truncate font-medium text-slate-800"
+              title={text.title}
+            >
               {text.title}
             </span>
             <LanguagePill locale={text.locale} />
+            {text.license === "ai" ? <AiPill /> : null}
           </span>
           <span className="mt-0.5 block truncate text-xs text-slate-500">
-            {t(`reading.libraryKinds.${text.kind}`)} · {t("reading.words", { count: wordCount })}
+            {t(`reading.libraryKinds.${text.kind}`)} ·{" "}
+            {t("reading.words", { count: wordCount })}
           </span>
         </button>
         <Button
@@ -561,7 +602,47 @@ function LibraryTextRow({
           {t("reading.importToPersonal")}
         </Button>
       </div>
+      {text.license !== "ai" && (text.author || text.sourceUrl) ? (
+        <TextCredit text={text} />
+      ) : null}
     </li>
+  );
+}
+
+// Attribution shown at the end of a sourced (non-AI) library text block.
+// Public-domain / CC0 works need no legal credit, but we surface the author
+// and a clickable source link for provenance (see SOURCES.md).
+function TextCredit({ text }: { text: ReadingLibraryText }) {
+  const { t } = useTranslation();
+  const licenseLabel = t(`reading.libraryOrigins.${text.license}`);
+  return (
+    <p className="mt-1 border-t border-slate-100 pt-1 text-[11px] leading-snug text-slate-400">
+      {text.author ? <span>{text.author} · </span> : null}
+      <span>{licenseLabel}</span>
+      {text.sourceUrl ? (
+        <>
+          {" · "}
+          <a
+            href={text.sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(event) => event.stopPropagation()}
+            className="underline decoration-dotted underline-offset-2 hover:text-slate-600"
+          >
+            {text.sourceName ?? t("reading.source")}
+          </a>
+        </>
+      ) : null}
+    </p>
+  );
+}
+
+function AiPill() {
+  const { t } = useTranslation();
+  return (
+    <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+      {t("reading.libraryOrigins.ai")}
+    </span>
   );
 }
 
@@ -611,7 +692,10 @@ function ReadingTextSummary({
   return (
     <>
       <span className="flex min-w-0 items-center gap-2">
-        <span className="truncate font-medium text-slate-800" title={text.title}>
+        <span
+          className="truncate font-medium text-slate-800"
+          title={text.title}
+        >
           {text.title}
         </span>
       </span>

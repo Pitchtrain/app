@@ -3,7 +3,11 @@
   "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
-    "build": "pwa-assets-generator && react-router build && node scripts/generate-service-worker.mjs",
+    "predev": "node scripts/build-reading-samples.mjs",
+    "prebuild": "node scripts/build-reading-samples.mjs",
+    "pretypecheck": "node scripts/build-reading-samples.mjs",
+    "pretest": "node scripts/build-reading-samples.mjs",
+    "build": "react-router build && node scripts/generate-service-worker.mjs",
     "dev": "react-router dev",
     "preview": "vite preview --outDir build/client",
     "start": "vite preview --outDir build/client",

@@ -16,7 +16,7 @@ including singers and voice actors.
 
 ## 🌐 App
 
-**[pitchtrain.github.io](https://pitchtrain.github.io)** and **[pitchtrain.github.io/app](https://pitchtrain.github.io/app)**
+**[pitchtrain.github.io](https://pitchtrain.github.io)** and **[pitchtrain.github.io/app](https://pitchtrain.github.io/app)** (the first auto forwards to the second)
 
 ---
 
@@ -140,6 +140,35 @@ Contributions are welcome! If you're planning something significant, please open
 Please keep pull requests focused, one feature or fix per PR.
 Follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). Run `npm run format` before committing to keep
 formatting consistent.
+
+### ✍️ Contributing reading content
+
+Built-in Reading Mode texts live as one Markdown file per text under `content/<locale>/<kind>/<slug>.md`
+(`locale` is `en` or `de`, `kind` is `dialog` or `text`). `scripts/build-reading-samples.mjs` compiles all of them into
+`app/readingSamples.generated.json` at build time — this step runs automatically before `dev`, `build`, `typecheck`, and `test`,
+so you never need to run it by hand.
+
+Each file has YAML-ish frontmatter followed by the text body, one paragraph per blank-line-separated block:
+
+```md
+---
+title: The Gift of the Magi
+license: public-domain
+author: O. Henry
+sourceName: Wikisource
+sourceUrl: https://en.wikisource.org/wiki/The_Gift_of_the_Magi
+---
+One dollar and eighty-seven cents. That was all...
+
+Three times Della counted it...
+```
+
+- `title` — required.
+- `license` — `ai`, `public-domain`, or `cc0`. Defaults to `ai` if omitted.
+- `author`, `sourceName`, `sourceUrl`  optional, shown as credit/source link in the UI for non-`ai` texts. Required for
+  `public-domain`/`cc0` entries.
+
+Samples are listed in the library sorted by locale, then kind, then filename — pick slugs accordingly.
 
 ---
 
