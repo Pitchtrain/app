@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "{{appName}}",
-    "tagline": "Voice pitch training app"
+    "tagline": "Voice pitch training app",
+    "updateReady": "Update available",
+    "updateReload": "Reload"
   },
   "common": {
     "next": "Next",
