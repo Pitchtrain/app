@@ -68,7 +68,7 @@ export function HomeChartPanel({
           ? "relative h-full min-h-0 bg-canvas"
           : "relative min-h-0 flex-1 bg-canvas"
       }
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+      style={{ paddingTop: "var(--top-chrome-offset)" }}
     >
       <PitchTimelineChart
         samples={samples}
@@ -85,7 +85,7 @@ export function HomeChartPanel({
       <div
         className="absolute z-20 flex items-center gap-1.5"
         style={{
-          top: "max(0.75rem, env(safe-area-inset-top))",
+          top: "max(0.75rem, var(--top-controls-offset))",
           right: "max(0.75rem, env(safe-area-inset-right))",
         }}
       >

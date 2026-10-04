@@ -66,7 +66,7 @@ function DialogContent({
           className
         )}
         style={{
-          paddingTop: "max(0px, env(safe-area-inset-top))",
+          paddingTop: "var(--top-chrome-offset)",
           paddingBottom: "max(0px, env(safe-area-inset-bottom))",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
@@ -80,7 +80,7 @@ function DialogContent({
             <Button
               variant="ghost"
               className="absolute right-4"
-              style={{ top: "calc(1rem + env(safe-area-inset-top))" }}
+              style={{ top: "calc(1rem + var(--top-chrome-offset))" }}
               size="icon-sm"
             >
               <XIcon />

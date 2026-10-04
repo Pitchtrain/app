@@ -6,8 +6,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme="light"
       className="toaster group"
-      offset={{ top: "calc(env(safe-area-inset-top) + 12px)" }}
-      mobileOffset={{ top: "calc(env(safe-area-inset-top) + 12px)" }}
+      offset={{ top: "calc(var(--top-chrome-offset) + 12px)" }}
+      mobileOffset={{ top: "calc(var(--top-chrome-offset) + 12px)" }}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,

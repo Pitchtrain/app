@@ -93,6 +93,27 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
+/* Distance top-anchored UI keeps from the screen edge. */
+:root {
+  --top-chrome-offset: env(safe-area-inset-top);
+  --top-controls-offset: var(--top-chrome-offset);
+}
+
+/*
+ * iOS 26/27 draws a "scroll edge effect" blur over the top of home-screen web
+ * apps, ~40pt below the safe area, with no opt-out. Floating top controls sit
+ * a little lower so the blur does not cover them. Tried on iOS 27 without
+ * effect: theme-color, status-bar-style, solid fixed top strip, sliding panel
+ * (https://tips.ojapp.app/en/ios-27-pwa-top-blur-workaround-2/).
+ */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    :root {
+      --top-controls-offset: calc(var(--top-chrome-offset) + 1.5rem);
+    }
+  }
+}
+
 @supports (height: 100dvh) {
   .h-screen-dynamic {
     height: 100dvh;
