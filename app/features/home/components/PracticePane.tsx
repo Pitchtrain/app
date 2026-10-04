@@ -15,6 +15,7 @@ type Props = {
   autoAdvanceEnabled: boolean;
   autoAdvanceSeconds: number;
   feedbackDirection: ReadingFeedbackDirection | null;
+  promptsEnabled: boolean;
   onPrev: () => void;
   onNext: () => void;
   onToggleSet: (id: string) => void;
@@ -35,6 +36,7 @@ export function PracticePane({
   autoAdvanceEnabled,
   autoAdvanceSeconds,
   feedbackDirection,
+  promptsEnabled,
   onPrev,
   onNext,
   onToggleSet,
@@ -47,23 +49,25 @@ export function PracticePane({
     <>
       {chartPanel}
       <MetricRow metrics={metrics} />
-      <PracticePrompt
-        sets={sets}
-        activeSetIds={activeSetIds}
-        pool={pool}
-        index={index}
-        onPrev={onPrev}
-        onNext={onNext}
-        onToggleSet={onToggleSet}
-        onOpenManage={onOpenManage}
-        onOpenActiveSheet={onOpenActiveSheet}
-        shuffleEnabled={shuffleEnabled}
-        onShuffleToggle={onShuffleToggle}
-        autoAdvanceEnabled={autoAdvanceEnabled}
-        autoAdvanceSeconds={autoAdvanceSeconds}
-        onAutoAdvanceToggle={onAutoAdvanceToggle}
-        feedbackDirection={feedbackDirection}
-      />
+      {promptsEnabled ? (
+        <PracticePrompt
+          sets={sets}
+          activeSetIds={activeSetIds}
+          pool={pool}
+          index={index}
+          onPrev={onPrev}
+          onNext={onNext}
+          onToggleSet={onToggleSet}
+          onOpenManage={onOpenManage}
+          onOpenActiveSheet={onOpenActiveSheet}
+          shuffleEnabled={shuffleEnabled}
+          onShuffleToggle={onShuffleToggle}
+          autoAdvanceEnabled={autoAdvanceEnabled}
+          autoAdvanceSeconds={autoAdvanceSeconds}
+          onAutoAdvanceToggle={onAutoAdvanceToggle}
+          feedbackDirection={feedbackDirection}
+        />
+      ) : null}
     </>
   );
 }

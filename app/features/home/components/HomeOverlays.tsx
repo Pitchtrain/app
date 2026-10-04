@@ -7,6 +7,7 @@ import type {
   SavedSession,
   VoiceRange,
 } from "~/types";
+import type { FeatureToggles } from "~/featureToggles";
 import { SettingsDrawer } from "~/components/SettingsDrawer";
 import { PracticeSetsDrawer } from "~/components/PracticeSetsDrawer";
 import { JournalDrawer } from "~/components/JournalDrawer";
@@ -15,6 +16,9 @@ import { PracticeActiveSheet } from "~/components/PracticeActiveSheet";
 import { ReadingOptionsDrawer } from "~/components/ReadingOptionsDrawer";
 
 type Props = {
+  featureToggles: FeatureToggles;
+  onFeatureTogglesChange: (toggles: FeatureToggles) => void;
+  featureTogglesLocked: boolean;
   settingsOpen: boolean;
   onSettingsOpenChange: (open: boolean) => void;
   detectorAlgorithm: DetectorAlgorithm;
@@ -144,6 +148,9 @@ export function HomeOverlays({
   onReadingDrawerOpenChange,
   readingSettings,
   onReadingSettingsChange,
+  featureToggles,
+  onFeatureTogglesChange,
+  featureTogglesLocked,
 }: Props) {
   return (
     <>
@@ -169,6 +176,9 @@ export function HomeOverlays({
         onReadingFeedbackChange={onReadingFeedbackChange}
         journalSessionCount={journalSessionCount}
         onClearAllJournal={onClearAllJournal}
+        featureToggles={featureToggles}
+        onFeatureTogglesChange={onFeatureTogglesChange}
+        featureTogglesLocked={featureTogglesLocked}
       />
       <PracticeSetsDrawer
         open={practiceDrawerOpen}
