@@ -20,14 +20,17 @@ function setupAudioContext() {
     createMediaStreamDestination: () => destination,
   } as unknown as AudioContext;
 
-  const recorderCalls: Array<{ stream: MediaStream; options?: MediaRecorderOptions }> =
-    [];
-  const recorderStub = vi
-    .fn()
-    .mockImplementation((stream: MediaStream, options?: MediaRecorderOptions) => {
-      recorderCalls.push({ stream, options });
-      return { stream, options } as unknown as MediaRecorder;
-    });
+  const recorderCalls: Array<{
+    stream: MediaStream;
+    options?: MediaRecorderOptions;
+  }> = [];
+  const recorderStub = vi.fn().mockImplementation(function (
+    stream: MediaStream,
+    options?: MediaRecorderOptions,
+  ) {
+    recorderCalls.push({ stream, options });
+    return { stream, options } as unknown as MediaRecorder;
+  });
   vi.stubGlobal("MediaRecorder", recorderStub);
 
   return { audioContext, source, destination, recorderCalls };
