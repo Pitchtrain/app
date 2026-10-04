@@ -152,7 +152,23 @@
     "restartTour": "Tour neu starten",
     "clearData": "Daten löschen",
     "clearDataAction": "Löschen",
-    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)"
+    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)",
+    "features": {
+      "title": "Funktionen",
+      "locked": "Beende die aktuelle Aufnahme, um Funktionen zu ändern.",
+      "journal": {
+        "label": "Journal",
+        "hint": "Aus: Aufnahmen anhören, ohne sie zu speichern."
+      },
+      "reading": {
+        "label": "Lesemodus",
+        "hint": "Aus: blendet Lesetexte und Teleprompter aus."
+      },
+      "prompts": {
+        "label": "Übungssätze",
+        "hint": "Aus: blendet Übungssätze und Sets im Detailmodus aus."
+      }
+    }
   },
   "ranges": {
     "title": "Gewählte Stimmlage",

@@ -14,6 +14,8 @@ type Props = {
   elapsedMs: number;
   isReadingMode: boolean;
   canSave: boolean;
+  /** The take isn't in the Journal yet, so dismissing it loses it. */
+  isUnsaved: boolean;
   onTogglePlay: () => void;
   onSeek: (timeMs: number) => void;
   onDismiss: () => void;
@@ -34,6 +36,7 @@ export function SessionTransport({
   elapsedMs,
   isReadingMode,
   canSave,
+  isUnsaved,
   onTogglePlay,
   onSeek,
   onDismiss,
@@ -64,7 +67,7 @@ export function SessionTransport({
           onDismiss={onDismiss}
           onSave={onSave}
           canSave={canSave}
-          requiresDiscardConfirm={canSave}
+          requiresDiscardConfirm={isUnsaved}
         />
       </>
     );
