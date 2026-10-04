@@ -198,7 +198,7 @@ export function WelcomeStepper() {
 
     return (
         <div
-            className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 pb-8 pt-[calc(2rem+env(safe-area-inset-top))] text-ink lg:min-h-0 lg:max-w-md lg:rounded-3xl lg:border lg:border-slate-200 lg:bg-white lg:px-6 lg:py-6 lg:shadow-sm">
+            className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 pb-8 pt-[calc(2rem+var(--top-chrome-offset))] text-ink lg:min-h-0 lg:max-w-md lg:rounded-3xl lg:border lg:border-slate-200 lg:bg-white lg:px-6 lg:py-6 lg:shadow-sm">
             <div className="flex items-center justify-between text-xs text-slate-500">
                 <span>{t("common.stepXofY", {current: stepIndex + 1, total: STEPS.length})}</span>
                 <button

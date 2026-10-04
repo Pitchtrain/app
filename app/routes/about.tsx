@@ -24,7 +24,7 @@ export default function AboutRoute() {
 
   return (
     <main className="min-h-dvh bg-canvas">
-      <div className="mx-auto w-full max-w-2xl px-5 pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-ink">
+      <div className="mx-auto w-full max-w-2xl px-5 pb-8 pt-[calc(1rem+var(--top-chrome-offset))] text-ink">
         <div className="flex justify-end">
           <Button asChild variant="ghost" size="icon" aria-label={t("common.close")}>
             <Link to={localePath("/")}>
