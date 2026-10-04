@@ -28,6 +28,10 @@ _Avoid_: List, deck
 Playing back the take just recorded, with its pitch timeline, before it is saved or discarded.
 _Avoid_: Preview, playback mode
 
+**Take**:
+A recording run that has not been saved to the Journal yet; saving it makes it a Session.
+_Avoid_: Draft, unsaved session
+
 **Journal**:
 The on-device archive of saved, named sessions, with tags and ZIP backup.
 _Avoid_: History, library
@@ -51,6 +55,10 @@ _Avoid_: Category, folder
 **Part**:
 One self-contained ZIP backup holding a date-ordered slice of the Journal's Sessions; a large Journal is exported as several Parts.
 _Avoid_: Chunk, volume, split
+
+**Offload**:
+Exporting Sessions as Parts and then removing them from the Journal to free the device.
+_Avoid_: Archive, prune, cleanup
 
 ## Configuration
 
