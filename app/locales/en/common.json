@@ -3,7 +3,8 @@
     "name": "{{appName}}",
     "tagline": "Voice pitch training app",
     "updateReady": "Update available",
-    "updateReload": "Reload"
+    "updateReload": "Reload",
+    "ogImageAlt": "{{appName}} logo"
   },
   "common": {
     "next": "Next",
@@ -384,16 +385,19 @@
   },
   "routes": {
     "home": {
-      "title": "{{appName}}",
-      "description": "Voice pitch training app"
+      "title": "{{appName}} – Voice Pitch Trainer for Trans Voice Training",
+      "description": "Free, open-source voice pitch trainer in your browser with real-time pitch detection, target ranges and recordings. Built for trans voice training.",
+      "heading": "{{appName}} – voice pitch trainer",
+      "intro": "Practice your voice with real-time pitch feedback, target ranges and recordings. Built for trans voice training, useful for anyone working on pitch. Everything stays in your browser: no account, no tracking.",
+      "loading": "Loading {{appName}}…"
     },
     "welcome": {
       "title": "Welcome · {{appName}}",
-      "description": "Quick tour of {{appName}}."
+      "description": "Set up {{appName}} for private, browser-based voice pitch practice with range targets, recording, playback and offline use."
     },
     "about": {
       "title": "About · {{appName}}",
-      "description": "About {{appName}} and key information.",
+      "description": "{{appName}} is a free, open-source voice pitch trainer for trans voice training with real-time pitch visualization, target ranges, recordings and a private browser journal.",
       "backToApp": "← Back to {{appName}}",
       "heading": "🎙️ About {{appName}}",
       "intro": "{{appName}} is an open-source, browser-based voice pitch training app for voice training. It runs entirely in your browser: no account, no server, no tracking.",
@@ -418,7 +422,7 @@
     },
     "imprint": {
       "title": "Imprint · {{appName}}",
-      "description": "Imprint for {{appName}}.",
+      "description": "Legal notice, maintainer information, source code and hosting details for {{appName}}.",
       "backToAbout": "← Back to About",
       "heading": "Imprint",
       "intro": "{{appName}} is a non-commercial, open-source project. It does not serve commercial content, does not run ads, and does not collect or transmit user data.",
@@ -432,7 +436,7 @@
     },
     "privacy": {
       "title": "Privacy · {{appName}}",
-      "description": "Privacy notice for {{appName}}.",
+      "description": "{{appName}} keeps voice recordings, pitch samples and settings in your browser with no accounts, analytics, cookies or tracking.",
       "heading": "Privacy notice",
       "lastUpdated": "Last updated: {{date}}",
       "section1Title": "1. What this app collects",

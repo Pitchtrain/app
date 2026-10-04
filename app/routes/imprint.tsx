@@ -1,29 +1,24 @@
 import { Link } from "react-router";
 import { Trans, useTranslation } from "react-i18next";
 import type { Route } from "./+types/imprint";
-import { APP_NAME } from "~/lib/appConfig";
-import { seoLinks, seoMeta } from "~/lib/seo";
+import { pageMeta } from "~/lib/seo";
+import { useLocale } from "~/hooks/useLocale";
 import {Button} from "~/components/ui/button";
 import {XIcon} from "lucide-react";
 
-export function meta({}: Route.MetaArgs) {
-  return seoMeta({
-    title: "Imprint",
-    description: `Legal notice, maintainer information, source code, and hosting details for ${APP_NAME}.`,
-    path: "/imprint",
-  });
+export function meta({ location }: Route.MetaArgs) {
+  return pageMeta("imprint", location);
 }
-
-export const links: Route.LinksFunction = () => seoLinks("/imprint");
 
 export default function ImprintRoute() {
   const { t } = useTranslation();
+  const { localePath } = useLocale();
   return (
     <main className="min-h-dvh bg-canvas">
       <div className="mx-auto w-full max-w-2xl px-5 pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-ink">
         <div className="flex justify-end">
           <Button asChild variant="ghost" size="icon" aria-label={t("common.close")}>
-            <Link to="/">
+            <Link to={localePath("/")}>
               <XIcon className="size-5"/>
             </Link>
           </Button>
@@ -74,7 +69,7 @@ export default function ImprintRoute() {
         <p className="mt-8 text-sm">
           <Trans
             i18nKey="routes.imprint.seeAlso"
-            components={[<Link key="0" to="/privacy" className="underline" />]}
+            components={[<Link key="0" to={localePath("/privacy")} className="underline" />]}
           />
         </p>
       </div>

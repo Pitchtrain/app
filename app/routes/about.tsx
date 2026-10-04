@@ -3,28 +3,23 @@ import { Trans, useTranslation } from "react-i18next";
 import type { Route } from "./+types/about";
 import { Button } from "~/components/ui/button";
 import { resetOnboarding } from "~/onboarding";
-import { APP_NAME } from "~/lib/appConfig";
-import { seoLinks, seoMeta } from "~/lib/seo";
+import { pageMeta } from "~/lib/seo";
+import { useLocale } from "~/hooks/useLocale";
 import React from "react";
 import {XIcon} from "lucide-react";
 
-export function meta({}: Route.MetaArgs) {
-  return seoMeta({
-    title: "About",
-    description: `${APP_NAME} is an open-source voice pitch trainer with real-time pitch visualization, target ranges, recordings, and a private browser journal.`,
-    path: "/about",
-  });
+export function meta({ location }: Route.MetaArgs) {
+  return pageMeta("about", location);
 }
-
-export const links: Route.LinksFunction = () => seoLinks("/about");
 
 export default function AboutRoute() {
   const { t } = useTranslation();
+  const { localePath } = useLocale();
   const navigate = useNavigate();
 
   function restartTour() {
     resetOnboarding();
-    void navigate("/welcome");
+    void navigate(localePath("/welcome"));
   }
 
   return (
@@ -32,7 +27,7 @@ export default function AboutRoute() {
       <div className="mx-auto w-full max-w-2xl px-5 pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-ink">
         <div className="flex justify-end">
           <Button asChild variant="ghost" size="icon" aria-label={t("common.close")}>
-            <Link to="/">
+            <Link to={localePath("/")}>
               <XIcon className="size-5"/>
             </Link>
           </Button>
@@ -75,8 +70,8 @@ export default function AboutRoute() {
             <Trans
               i18nKey="routes.about.seePrivacy"
               components={[
-                <Link key="0" to="/privacy" className="underline" />,
-                <Link key="1" to="/imprint" className="underline" />,
+                <Link key="0" to={localePath("/privacy")} className="underline" />,
+                <Link key="1" to={localePath("/imprint")} className="underline" />,
               ]}
             />
           </p>
@@ -90,10 +85,10 @@ export default function AboutRoute() {
         </Section>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
-          <Link to="/imprint" className="underline underline-offset-4">
+          <Link to={localePath("/imprint")} className="underline underline-offset-4">
             {t("common.imprint")}
           </Link>
-          <Link to="/privacy" className="underline underline-offset-4">
+          <Link to={localePath("/privacy")} className="underline underline-offset-4">
             {t("common.privacy")}
           </Link>
           <a

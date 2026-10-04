@@ -1,29 +1,24 @@
 import { Link } from "react-router";
 import { Trans, useTranslation } from "react-i18next";
 import type { Route } from "./+types/privacy";
-import { APP_NAME } from "~/lib/appConfig";
-import { seoLinks, seoMeta } from "~/lib/seo";
+import { pageMeta } from "~/lib/seo";
+import { useLocale } from "~/hooks/useLocale";
 import {Button} from "~/components/ui/button";
 import {XIcon} from "lucide-react";
 
-export function meta({}: Route.MetaArgs) {
-  return seoMeta({
-    title: "Privacy",
-    description: `${APP_NAME} keeps voice recordings, pitch samples, and settings in your browser with no accounts, analytics, cookies, or tracking.`,
-    path: "/privacy",
-  });
+export function meta({ location }: Route.MetaArgs) {
+  return pageMeta("privacy", location);
 }
-
-export const links: Route.LinksFunction = () => seoLinks("/privacy");
 
 export default function PrivacyRoute() {
   const { t } = useTranslation();
+  const { localePath } = useLocale();
   return (
     <main className="min-h-dvh bg-canvas">
       <div className="mx-auto w-full max-w-2xl px-5 pb-8 pt-[calc(1rem+env(safe-area-inset-top))] text-ink">
         <div className="flex justify-end">
           <Button asChild variant="ghost" size="icon" aria-label={t("common.close")}>
-            <Link to="/">
+            <Link to={localePath("/")}>
               <XIcon className="size-5"/>
             </Link>
           </Button>
@@ -100,7 +95,7 @@ export default function PrivacyRoute() {
           <p>
             <Trans
               i18nKey="routes.privacy.section6Body"
-              components={[<Link key="0" to="/imprint" className="underline" />]}
+              components={[<Link key="0" to={localePath("/imprint")} className="underline" />]}
             />
           </p>
         </Section>

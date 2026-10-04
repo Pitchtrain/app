@@ -1,5 +1,7 @@
 import {useMemo, useState} from "react";
-import {useNavigate} from "react-router";
+import {Link, useNavigate} from "react-router";
+import {useLocale} from "~/hooks/useLocale";
+import type {Locale} from "~/lib/locale";
 import {Trans, useTranslation} from "react-i18next";
 import {Button} from "~/components/ui/button";
 import {
@@ -54,6 +56,7 @@ const STEPS_NO_INSTALL: StepKey[] = [
 export function WelcomeStepper() {
     const navigate = useNavigate();
     const {t} = useTranslation();
+    const {localePath} = useLocale();
     const STEPS = isPWAInstalled() ? STEPS_NO_INSTALL : ALL_STEPS;
     const [stepIndex, setStepIndex] = useState(0);
     const [understood, setUnderstood] = useState(false);
@@ -80,12 +83,12 @@ export function WelcomeStepper() {
 
     function finish() {
         markOnboardingCompleted();
-        void navigate("/");
+        void navigate(localePath("/"));
     }
 
     function skipAll() {
         markOnboardingCompleted();
-        void navigate("/");
+        void navigate(localePath("/"));
     }
 
     function handlePickRange(id: string) {
@@ -277,9 +280,9 @@ export function WelcomeStepper() {
 }
 
 function StepLanguage() {
-    const {t, i18n} = useTranslation();
-    const current = i18n.resolvedLanguage ?? i18n.language ?? "en";
-    const options: Array<{code: string; label: string}> = [
+    const {t} = useTranslation();
+    const {locale, switchLocale} = useLocale();
+    const options: Array<{code: Locale; label: string}> = [
         {code: "en", label: t("common.english")},
         {code: "de", label: t("common.german")},
     ];
@@ -294,12 +297,12 @@ function StepLanguage() {
             </p>
             <div className="space-y-2">
                 {options.map((opt) => {
-                    const selected = current.startsWith(opt.code);
+                    const selected = locale === opt.code;
                     return (
                         <button
                             type="button"
                             key={opt.code}
-                            onClick={() => void i18n.changeLanguage(opt.code)}
+                            onClick={() => switchLocale(opt.code)}
                             className={`w-full rounded-2xl border p-4 text-left transition ${
                                 selected
                                     ? "border-sea bg-sea/10"
@@ -606,6 +609,7 @@ const RANGE_EMOJI: Record<string, string> = {
 
 function StepPrivacy() {
     const {t} = useTranslation();
+    const {localePath} = useLocale();
     return (
         <section className="space-y-4">
             <div className="text-5xl">🔒</div>
@@ -622,8 +626,8 @@ function StepPrivacy() {
                 <Trans
                     i18nKey="onboarding.privacy.footer"
                     components={[
-                        <a key="0" href="/privacy" className="underline"/>,
-                        <a key="1" href="/imprint" className="underline"/>,
+                        <Link key="0" to={localePath("/privacy")} className="underline"/>,
+                        <Link key="1" to={localePath("/imprint")} className="underline"/>,
                     ]}
                 />
             </p>

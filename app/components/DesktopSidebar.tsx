@@ -12,6 +12,7 @@ import {
 import type {ReactNode} from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router";
+import {useLocale} from "~/hooks/useLocale";
 import type {
     DetectorAlgorithm,
     JournalTag,
@@ -262,6 +263,7 @@ function Rail({
     onPanelChange: (panel: DesktopPanel) => void;
 }) {
     const {t} = useTranslation();
+    const {localePath} = useLocale();
 
     return (
         <div className="flex shrink-0 flex-col items-center gap-2 px-2 py-3">
@@ -298,7 +300,7 @@ function Rail({
                 />
                 <RailLink
                     label={t("common.about")}
-                    to="/about"
+                    to={localePath("/about")}
                     icon={<InfoIcon className="size-5"/>}
                 />
                 <RailButton

@@ -1,4 +1,6 @@
 import {Link, useNavigate} from "react-router";
+import {useLocale} from "~/hooks/useLocale";
+import {isLocale} from "~/lib/locale";
 import {BookOpenIcon, RotateCcwIcon, ShieldIcon, Trash2Icon} from "lucide-react";
 import {SiGithub} from "@icons-pack/react-simple-icons";
 import {useTranslation} from "react-i18next";
@@ -160,8 +162,8 @@ export function AdvancedSettingsPanel({
     | "journalSessionCount"
     | "onClearAllJournal"
 >) {
-    const {t, i18n} = useTranslation();
-    const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? "en").startsWith("de") ? "de" : "en";
+    const {t} = useTranslation();
+    const {locale, switchLocale} = useLocale();
 
     return (
         <>
@@ -206,8 +208,10 @@ export function AdvancedSettingsPanel({
 
                 <Field label={t("settings.language")}>
                     <Select
-                        value={currentLang}
-                        onValueChange={(value) => void i18n.changeLanguage(value)}
+                        value={locale}
+                        onValueChange={(value) => {
+                            if (isLocale(value)) switchLocale(value);
+                        }}
                     >
                         <SelectTrigger className="w-full">
                             <SelectValue/>
@@ -272,10 +276,11 @@ function JournalDataSection({
 function AboutSection() {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const {localePath} = useLocale();
 
     function restartTour() {
         resetOnboarding();
-        void navigate("/welcome");
+        void navigate(localePath("/welcome"));
     }
 
     return (
@@ -291,8 +296,8 @@ function AboutSection() {
                 </span>
             </button>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <AboutTile to="/about" icon={<BookOpenIcon className="size-4"/>} label={t("common.about")}/>
-                <AboutTile to="/privacy" icon={<ShieldIcon className="size-4"/>} label={t("common.privacy")}/>
+                <AboutTile to={localePath("/about")} icon={<BookOpenIcon className="size-4"/>} label={t("common.about")}/>
+                <AboutTile to={localePath("/privacy")} icon={<ShieldIcon className="size-4"/>} label={t("common.privacy")}/>
                 <AboutTile to="https://github.com/Pitchtrain/app" icon={<SiGithub className="size-4"/>} label="GitHub" external/>
             </div>
         </div>

@@ -1,10 +1,12 @@
-import {isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration,} from "react-router";
+import {isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation,} from "react-router";
+import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 
 import type {Route} from "./+types/root";
 import "./app.css";
 import "./lib/i18n";
 import {APP_NAME} from "./lib/appConfig";
+import {localeFromPath} from "./lib/locale";
 import {Toaster} from "./components/ui/sonner";
 import {TooltipProvider} from "./components/ui/tooltip";
 import {useServiceWorkerRegistration} from "./hooks/useServiceWorkerRegistration";
@@ -17,10 +19,26 @@ export const links: Route.LinksFunction = () => [
     {rel: "manifest", href: `${import.meta.env.BASE_URL}manifest.webmanifest`},
 ];
 
+// Only used when no page route matched (SPA fallback, 404): page routes
+// export their own meta, which replaces this.
+export const meta: Route.MetaFunction = () => [
+    {title: APP_NAME},
+    {name: "robots", content: "noindex"},
+];
+
 export function Layout({children}: { children: React.ReactNode }) {
     const {i18n} = useTranslation();
+    const locale = localeFromPath(useLocation().pathname);
+    // Prerendering renders every page in one process, so align the language
+    // before rendering; in the browser, back/forward across locales lands here.
+    if (typeof window === "undefined" && i18n.language !== locale) {
+        void i18n.changeLanguage(locale);
+    }
+    useEffect(() => {
+        if (i18n.language !== locale) void i18n.changeLanguage(locale);
+    }, [i18n, locale]);
     return (
-        <html lang={i18n.resolvedLanguage ?? i18n.language ?? "en"}>
+        <html lang={locale}>
         <head>
             <meta charSet="utf-8"/>
             <meta

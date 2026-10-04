@@ -6,12 +6,15 @@ import { getManifest } from "workbox-build";
 
 const BASE_PATH = process.env.BASE_PATH ?? "/";
 const clientBuildDirectory = resolve("build/client");
-const appShell = resolve(clientBuildDirectory, "index.html");
+// Every route is prerendered; the SPA fallback is the locale-neutral shell
+// that hydrates any path, so it backs offline navigation and 404s.
+const appShellFile = "__spa-fallback.html";
+const appShell = resolve(clientBuildDirectory, appShellFile);
 const serviceWorkerPath = resolve(clientBuildDirectory, "sw.js");
 
 if (!existsSync(appShell)) {
   throw new Error(
-    "Cannot generate the service worker before build/client/index.html exists.",
+    `Cannot generate the service worker before build/client/${appShellFile} exists.`,
   );
 }
 
@@ -20,7 +23,7 @@ await removeGeneratedWorkboxFiles();
 const { count, manifestEntries, size, warnings } = await getManifest({
   globDirectory: clientBuildDirectory,
   globPatterns: [
-    "index.html",
+    appShellFile,
     "manifest.webmanifest",
     "*.{png,ico,svg}",
     "assets/**/*.{js,css,woff,woff2}",
@@ -33,7 +36,10 @@ const cacheRevision = createHash("sha256")
   .digest("hex")
   .slice(0, 16);
 
-await writeFile(serviceWorkerPath, buildServiceWorker(BASE_PATH, cacheRevision, manifestEntries));
+await writeFile(
+  serviceWorkerPath,
+  buildServiceWorker(BASE_PATH, appShellFile, cacheRevision, manifestEntries),
+);
 
 // Static hosts without rewrite rules (e.g. GitHub Pages) serve 404.html for
 // unknown paths; a copy of the shell keeps deep links working there.
@@ -56,10 +62,10 @@ async function removeGeneratedWorkboxFiles() {
   );
 }
 
-function buildServiceWorker(basePath, cacheRevision, manifestEntries) {
+function buildServiceWorker(basePath, appShellFile, cacheRevision, manifestEntries) {
   return `const CACHE_PREFIX = "pitchtrain-precache";
 const CACHE_NAME = \`\${CACHE_PREFIX}-${cacheRevision}\`;
-const APP_SHELL_URL = new URL("${basePath}index.html", self.location.origin).href;
+const APP_SHELL_URL = new URL("${basePath}${appShellFile}", self.location.origin).href;
 const PRECACHE_URLS = ${JSON.stringify(
     manifestEntries.map((entry) => `${basePath}${entry.url}`),
     null,

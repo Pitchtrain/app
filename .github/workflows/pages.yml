@@ -37,6 +37,7 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /app/
+          VITE_SITE_URL: https://pitchtrain.github.io/app/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

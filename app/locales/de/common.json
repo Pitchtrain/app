@@ -3,7 +3,8 @@
     "name": "{{appName}}",
     "tagline": "Stimmlagen-Training-App",
     "updateReady": "Update verfügbar",
-    "updateReload": "Neu laden"
+    "updateReload": "Neu laden",
+    "ogImageAlt": "{{appName}}-Logo"
   },
   "common": {
     "next": "Weiter",
@@ -384,16 +385,19 @@
   },
   "routes": {
     "home": {
-      "title": "{{appName}}",
-      "description": "Stimmlagen-Training-App"
+      "title": "{{appName}} – Stimmlagen-Trainer für trans Stimmtraining",
+      "description": "Kostenloser, quelloffener Stimmlagen-Trainer im Browser mit Tonhöhe in Echtzeit, Zielbereichen und Aufnahmen. Gemacht für Stimmtraining von trans Personen.",
+      "heading": "{{appName}} – Stimmlagen-Trainer",
+      "intro": "Trainiere deine Stimme mit Tonhöhen-Feedback in Echtzeit, Zielbereichen und Aufnahmen. Gemacht für Stimmtraining von trans Personen, nützlich für alle, die an ihrer Stimmlage arbeiten. Alles bleibt in deinem Browser: kein Konto, kein Tracking.",
+      "loading": "{{appName}} wird geladen…"
     },
     "welcome": {
       "title": "Willkommen · {{appName}}",
-      "description": "Kurze Tour durch {{appName}}."
+      "description": "Richte {{appName}} für privates Stimmlagen-Training im Browser ein – mit Zielbereichen, Aufnahme, Wiedergabe und Offline-Nutzung."
     },
     "about": {
       "title": "Über · {{appName}}",
-      "description": "Über {{appName}} und wichtige Infos.",
+      "description": "{{appName}} ist ein kostenloser, quelloffener Stimmlagen-Trainer für trans Stimmtraining mit Tonhöhe in Echtzeit, Zielbereichen, Aufnahmen und privatem Journal im Browser.",
       "backToApp": "← Zurück zu {{appName}}",
       "heading": "🎙️ Über {{appName}}",
       "intro": "{{appName}} ist eine quelloffene, browserbasierte Stimmlagen-Training-App für das Stimmtraining. Sie läuft komplett im Browser: kein Konto, kein Server, kein Tracking.",
@@ -418,7 +422,7 @@
     },
     "imprint": {
       "title": "Impressum · {{appName}}",
-      "description": "Impressum für {{appName}}.",
+      "description": "Impressum, Kontakt, Quellcode und Hosting von {{appName}}.",
       "backToAbout": "← Zurück zu Über",
       "heading": "Impressum",
       "intro": "{{appName}} ist ein nicht-kommerzielles, quelloffenes Projekt. Es zeigt keine kommerziellen Inhalte, schaltet keine Werbung und erhebt oder überträgt keine Nutzerdaten.",
@@ -432,7 +436,7 @@
     },
     "privacy": {
       "title": "Datenschutz · {{appName}}",
-      "description": "Datenschutzhinweis für {{appName}}.",
+      "description": "{{appName}} speichert Aufnahmen, Tonhöhendaten und Einstellungen nur in deinem Browser – ohne Konto, Analyse, Cookies oder Tracking.",
       "heading": "Datenschutzhinweis",
       "lastUpdated": "Zuletzt aktualisiert: {{date}}",
       "section1Title": "1. Was diese App erhebt",

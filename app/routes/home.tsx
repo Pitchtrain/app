@@ -8,9 +8,16 @@ import {
   pickRandomLibraryText,
 } from "~/readingLibraryFilters";
 import type { Route } from "./+types/home";
+import { isbot } from "isbot";
 import { hasCompletedOnboarding } from "~/onboarding";
-import { APP_DESCRIPTION } from "~/lib/appConfig";
-import { seoLinks, seoMeta } from "~/lib/seo";
+import {
+  DEFAULT_LOCALE,
+  localeFromPath,
+  localizePath,
+  preferredLocale,
+  stripBasename,
+} from "~/lib/locale";
+import { pageMeta } from "~/lib/seo";
 import { type ChartMode } from "~/components/PitchTimelineChart";
 import { TopBar } from "~/components/TopBar";
 import { type DesktopPanel, DesktopSidebar } from "~/components/DesktopSidebar";
@@ -29,20 +36,53 @@ import { HomeOverlays } from "~/features/home/components/HomeOverlays";
 
 const DEFAULT_TIMELINE_WINDOW_SECONDS = 10;
 
-export function meta({}: Route.MetaArgs) {
-  return seoMeta({
-    description: APP_DESCRIPTION,
-    path: "/",
-  });
+const HOME_FEATURE_KEYS = [
+  "routes.about.feature1",
+  "routes.about.feature2",
+  "routes.about.feature3",
+  "routes.about.feature4",
+  "routes.about.feature5",
+  "routes.about.feature6",
+] as const;
+
+export function meta({ location }: Route.MetaArgs) {
+  return pageMeta("home", location);
 }
 
-export const links: Route.LinksFunction = () => seoLinks("/");
-
-export function clientLoader() {
+export function clientLoader({ request }: Route.ClientLoaderArgs) {
+  // Crawlers have no stored state; send them neither to the onboarding tour
+  // nor to another language (docs/adr/0001-locale-urls.md).
+  if (isbot(navigator.userAgent)) return null;
+  const locale = localeFromPath(stripBasename(new URL(request.url).pathname));
+  if (locale === DEFAULT_LOCALE) {
+    const preferred = preferredLocale();
+    if (preferred !== locale) throw redirect(localizePath("/", preferred));
+  }
   if (!hasCompletedOnboarding()) {
-    throw redirect("/welcome");
+    throw redirect(localizePath("/welcome", locale));
   }
   return null;
+}
+
+// Prerendered in place of the app, which needs the browser; gives crawlers
+// without JavaScript real content to read.
+export function HydrateFallback() {
+  const { t } = useTranslation();
+  return (
+    <main className="mx-auto w-full max-w-2xl px-5 py-12 text-ink">
+      <h1 className="text-3xl font-semibold tracking-tight">{t("routes.home.heading")}</h1>
+      <p className="mt-3 text-slate-700">{t("routes.home.intro")}</p>
+      <h2 className="mt-6 text-lg font-semibold">{t("routes.about.featuresTitle")}</h2>
+      <ul className="mt-2 space-y-1 text-slate-700">
+        {HOME_FEATURE_KEYS.map((key) => (
+          <li key={key}>{t(key)}</li>
+        ))}
+      </ul>
+      <p className="mt-6 text-sm text-slate-500" aria-live="polite">
+        {t("routes.home.loading")}
+      </p>
+    </main>
+  );
 }
 
 export default function Home() {
