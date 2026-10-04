@@ -4,6 +4,10 @@ WORKDIR /app
 RUN npm ci
 
 FROM node:24-alpine AS build
+# Public URL incl. base path (e.g. https://example.org/); enables canonical
+# links, social previews and sitemap.xml. Leave empty for private instances.
+ARG SITE_URL=""
+ENV VITE_SITE_URL=$SITE_URL
 COPY . /app/
 COPY --from=deps /app/node_modules /app/node_modules
 WORKDIR /app
