@@ -158,11 +158,11 @@
       "locked": "Finish the current recording to change features.",
       "journal": {
         "label": "Journal",
-        "hint": "Off: review takes without saving them."
+        "hint": "Off: Journal is hidden and takes cannot be saved."
       },
       "reading": {
         "label": "Reading mode",
-        "hint": "Off: hides reading texts and the teleprompter."
+        "hint": "Off: disables reading mode."
       },
       "prompts": {
         "label": "Prompts",

@@ -158,11 +158,11 @@
       "locked": "Beende die aktuelle Aufnahme, um Funktionen zu ändern.",
       "journal": {
         "label": "Journal",
-        "hint": "Aus: Aufnahmen anhören, ohne sie zu speichern."
+        "hint": "Aus: Journal ist ausgeblendet und Aufnahmen können nicht gespeichert werden."
       },
       "reading": {
         "label": "Lesemodus",
-        "hint": "Aus: blendet Lesetexte und Teleprompter aus."
+        "hint": "Aus: deaktiviert den Lesemodus."
       },
       "prompts": {
         "label": "Übungssätze",
