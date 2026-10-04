@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect } from "react-router";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -26,6 +26,7 @@ import { usePracticeState } from "~/features/home/hooks/usePracticeState";
 import { useReadingState } from "~/features/home/hooks/useReadingState";
 import { usePitchRecording } from "~/features/home/hooks/usePitchRecording";
 import { useJournalLibrary } from "~/features/home/hooks/useJournalLibrary";
+import { useFeatureToggles } from "~/features/home/hooks/useFeatureToggles";
 import { usePitchDisplayModel } from "~/features/home/hooks/usePitchDisplayModel";
 import { useReadingFeedback } from "~/features/home/hooks/useReadingFeedback";
 import { HomeChartPanel } from "~/features/home/components/HomeChartPanel";
@@ -95,6 +96,7 @@ export default function Home() {
   const [chartMode, setChartMode] = useState<ChartMode>("full");
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
 
+  const { featureToggles, setFeatureToggles } = useFeatureToggles();
   const range = useRangeSettingsState();
   const practice = usePracticeState();
   const reading = useReadingState({ desktopPanel, setDesktopPanel });
@@ -129,9 +131,14 @@ export default function Home() {
     highlightedRanges: range.highlightedRanges,
   });
 
+  const featureTogglesLocked =
+    recording.mode === "recording" || recording.mode === "paused";
   const isReadingMode =
-    reading.practiceView === "reading" && recording.mode !== "review";
+    featureToggles.reading &&
+    reading.practiceView === "reading" &&
+    recording.mode !== "review";
   const isSentenceFeedbackActive =
+    featureToggles.prompts &&
     reading.practiceView === "standard" &&
     recording.mode !== "review" &&
     practice.practiceSettings.sentenceFeedbackEnabled;
@@ -145,6 +152,20 @@ export default function Home() {
     (sum, session) => sum + session.audioBlob.size,
     0,
   );
+
+  // A feature switched off while in use falls back to Detail mode / Setup.
+  const { setPracticeView } = reading;
+  useEffect(() => {
+    if (!featureToggles.reading) setPracticeView("standard");
+  }, [featureToggles.reading, setPracticeView]);
+
+  useEffect(() => {
+    const hidden =
+      (desktopPanel === "journal" && !featureToggles.journal) ||
+      (desktopPanel === "reading" && !featureToggles.reading) ||
+      (desktopPanel === "sets" && !featureToggles.prompts);
+    if (hidden) setDesktopPanel("range");
+  }, [desktopPanel, featureToggles]);
 
   function showRandomReadingText() {
     const text = pickRandomLibraryText(filterLibraryTexts(loadLibraryFilters()));
@@ -186,8 +207,10 @@ export default function Home() {
       isReadingMode={isReadingMode}
       mode={recording.mode}
       statusLabel={display.statusLabel}
-      onPrev={practice.prevPrompt}
-      onNext={practice.nextPrompt}
+      readingEnabled={featureToggles.reading}
+      journalEnabled={featureToggles.journal}
+      onPrev={featureToggles.prompts ? practice.prevPrompt : undefined}
+      onNext={featureToggles.prompts ? practice.nextPrompt : undefined}
       onScrub={recording.seek}
       onEnterReadingMode={reading.enterReadingMode}
       onLeaveReadingMode={reading.leaveReadingMode}
@@ -225,6 +248,7 @@ export default function Home() {
                   ? visibleReadingFeedbackDirection
                   : null
               }
+              promptsEnabled={featureToggles.prompts}
               onPrev={practice.prevPrompt}
               onNext={practice.nextPrompt}
               onToggleSet={practice.togglePracticeSet}
@@ -245,7 +269,8 @@ export default function Home() {
             durationMs={recording.durationMs}
             elapsedMs={recording.elapsedMs}
             isReadingMode={isReadingMode}
-            canSave={activeSessionId == null}
+            canSave={featureToggles.journal && activeSessionId == null}
+            isUnsaved={activeSessionId == null}
             onTogglePlay={recording.togglePlay}
             onSeek={recording.seek}
             onDismiss={recording.dismiss}
@@ -314,10 +339,16 @@ export default function Home() {
           onClearAllJournal={() => void journal.handleClearAllSessions()}
           readingSettings={reading.readingSettings}
           onReadingSettingsChange={handleDesktopReadingSettingsChange}
+          featureToggles={featureToggles}
+          onFeatureTogglesChange={setFeatureToggles}
+          featureTogglesLocked={featureTogglesLocked}
         />
       </div>
 
       <HomeOverlays
+        featureToggles={featureToggles}
+        onFeatureTogglesChange={setFeatureToggles}
+        featureTogglesLocked={featureTogglesLocked}
         settingsOpen={settingsOpen}
         onSettingsOpenChange={setSettingsOpen}
         detectorAlgorithm={range.detectorAlgorithm}
@@ -341,12 +372,16 @@ export default function Home() {
         }
         journalSessionCount={journal.journalSessions.length}
         onClearAllJournal={() => void journal.handleClearAllSessions()}
-        practiceDrawerOpen={practice.practiceDrawerOpen}
+        practiceDrawerOpen={
+          featureToggles.prompts && practice.practiceDrawerOpen
+        }
         onPracticeDrawerOpenChange={practice.setPracticeDrawerOpen}
         practiceSets={practice.practiceSettings.sets}
         activeSetIds={practice.practiceSettings.activeSetIds}
         onPracticeSetsChange={practice.handlePracticeSetsChange}
-        journalDrawerOpen={journal.journalDrawerOpen}
+        journalDrawerOpen={
+          featureToggles.journal && journal.journalDrawerOpen
+        }
         onJournalDrawerOpenChange={journal.setJournalDrawerOpen}
         journalSessions={journal.journalSessions}
         journalTags={journal.journalTags}
@@ -371,7 +406,9 @@ export default function Home() {
         canExportJournal={journal.canExportJournal}
         saveDialogSession={journal.saveDialogSession}
         onSaveDialogClose={() => journal.setSaveDialogSession(null)}
-        practiceActiveSheetOpen={practice.practiceActiveSheetOpen}
+        practiceActiveSheetOpen={
+          featureToggles.prompts && practice.practiceActiveSheetOpen
+        }
         onPracticeActiveSheetOpenChange={practice.setPracticeActiveSheetOpen}
         onTogglePracticeSet={practice.togglePracticeSet}
         shuffleEnabled={practice.practiceSettings.shuffleEnabled}
@@ -385,7 +422,9 @@ export default function Home() {
         }
         onSentenceFeedbackToggle={practice.setSentenceFeedbackEnabled}
         onOpenPracticeSets={openPracticeSets}
-        readingDrawerOpen={reading.readingDrawerOpen}
+        readingDrawerOpen={
+          featureToggles.reading && reading.readingDrawerOpen
+        }
         onReadingDrawerOpenChange={reading.setReadingDrawerOpen}
         readingSettings={reading.readingSettings}
         onReadingSettingsChange={reading.setReadingSettings}

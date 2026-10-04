@@ -5,6 +5,7 @@ import {BookOpenIcon, RotateCcwIcon, ShieldIcon, Trash2Icon} from "lucide-react"
 import {SiGithub} from "@icons-pack/react-simple-icons";
 import {useTranslation} from "react-i18next";
 import type {DetectorAlgorithm, ReadingFeedbackSettings, VoiceRange} from "~/types";
+import {FEATURE_NAMES, type FeatureToggles} from "~/featureToggles";
 import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle,} from "./ui/drawer";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "./ui/select";
 import {CustomRangeFields, HighlightToggle} from "./VoiceRangesPanel";
@@ -47,6 +48,10 @@ export type SettingsPanelProps = {
     onReadingFeedbackChange: (settings: ReadingFeedbackSettings) => void;
     journalSessionCount: number;
     onClearAllJournal: () => void;
+    featureToggles: FeatureToggles;
+    onFeatureTogglesChange: (toggles: FeatureToggles) => void;
+    /** Toggles can't change mid-take. */
+    featureTogglesLocked: boolean;
 };
 
 export function SettingsPanel({
@@ -69,6 +74,9 @@ export function SettingsPanel({
                                   onReadingFeedbackChange,
                                   journalSessionCount,
                                   onClearAllJournal,
+                                  featureToggles,
+                                  onFeatureTogglesChange,
+                                  featureTogglesLocked,
                               }: SettingsPanelProps) {
     const {t} = useTranslation();
     const orderedRanges = [
@@ -141,10 +149,26 @@ export function SettingsPanel({
                 onWindowChange={onWindowChange}
                 journalSessionCount={journalSessionCount}
                 onClearAllJournal={onClearAllJournal}
+                featureToggles={featureToggles}
+                onFeatureTogglesChange={onFeatureTogglesChange}
+                featureTogglesLocked={featureTogglesLocked}
             />
         </>
     );
 }
+
+export type AdvancedSettingsPanelProps = Pick<
+    SettingsPanelProps,
+    | "detectorAlgorithm"
+    | "onDetectorChange"
+    | "timelineWindowSeconds"
+    | "onWindowChange"
+    | "journalSessionCount"
+    | "onClearAllJournal"
+    | "featureToggles"
+    | "onFeatureTogglesChange"
+    | "featureTogglesLocked"
+>;
 
 export function AdvancedSettingsPanel({
     detectorAlgorithm,
@@ -153,15 +177,10 @@ export function AdvancedSettingsPanel({
     onWindowChange,
     journalSessionCount,
     onClearAllJournal,
-}: Pick<
-    SettingsPanelProps,
-    | "detectorAlgorithm"
-    | "onDetectorChange"
-    | "timelineWindowSeconds"
-    | "onWindowChange"
-    | "journalSessionCount"
-    | "onClearAllJournal"
->) {
+    featureToggles,
+    onFeatureTogglesChange,
+    featureTogglesLocked,
+}: AdvancedSettingsPanelProps) {
     const {t} = useTranslation();
     const {locale, switchLocale} = useLocale();
 
@@ -227,6 +246,12 @@ export function AdvancedSettingsPanel({
                 </Field>
             </div>
 
+            <FeaturesSection
+                toggles={featureToggles}
+                onChange={onFeatureTogglesChange}
+                locked={featureTogglesLocked}
+            />
+
             <JournalDataSection
                 sessionCount={journalSessionCount}
                 onClearAll={onClearAllJournal}
@@ -236,6 +261,53 @@ export function AdvancedSettingsPanel({
 
             <AboutSection/>
         </>
+    );
+}
+
+function FeaturesSection({
+    toggles,
+    onChange,
+    locked,
+}: {
+    toggles: FeatureToggles;
+    onChange: (toggles: FeatureToggles) => void;
+    locked: boolean;
+}) {
+    const {t} = useTranslation();
+
+    return (
+        <section className="space-y-2 px-4 pb-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {t("settings.features.title")}
+            </p>
+            {FEATURE_NAMES.map((name) => (
+                <label
+                    key={name}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5"
+                >
+                    <span className="min-w-0">
+                        <span className="block text-sm text-ink">
+                            {t(`settings.features.${name}.label`)}
+                        </span>
+                        <span className="block text-xs text-slate-500">
+                            {t(`settings.features.${name}.hint`)}
+                        </span>
+                    </span>
+                    <input
+                        type="checkbox"
+                        checked={toggles[name]}
+                        disabled={locked}
+                        onChange={(event) =>
+                            onChange({...toggles, [name]: event.target.checked})
+                        }
+                        className="size-5 shrink-0 accent-sea disabled:opacity-50"
+                    />
+                </label>
+            ))}
+            {locked ? (
+                <p className="text-xs text-slate-500">{t("settings.features.locked")}</p>
+            ) : null}
+        </section>
     );
 }
 

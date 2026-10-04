@@ -27,7 +27,8 @@ import {Button} from "./ui/button";
 import {Tooltip, TooltipContent, TooltipTrigger} from "./ui/tooltip";
 import {CustomRangeFields, HighlightToggle, VoiceRangesPanel} from "./VoiceRangesPanel";
 import {JournalPanel} from "./JournalPanel";
-import {AdvancedSettingsPanel} from "./SettingsDrawer";
+import {AdvancedSettingsPanel, type AdvancedSettingsPanelProps} from "./SettingsDrawer";
+import type {FeatureToggles} from "~/featureToggles";
 import {PracticeSetsPanel} from "./PracticeSetsDrawer";
 import {ReadingOptionsPanel} from "./ReadingOptionsDrawer";
 import {ReadingFeedbackControls} from "./ReadingFeedbackControls";
@@ -83,6 +84,9 @@ type Props = {
     onClearAllJournal: () => void;
     readingSettings: ReadingSettings;
     onReadingSettingsChange: (settings: ReadingSettings) => void;
+    featureToggles: FeatureToggles;
+    onFeatureTogglesChange: (toggles: FeatureToggles) => void;
+    featureTogglesLocked: boolean;
 };
 
 export function DesktopSidebar({
@@ -134,6 +138,9 @@ export function DesktopSidebar({
     onClearAllJournal,
     readingSettings,
     onReadingSettingsChange,
+    featureToggles,
+    onFeatureTogglesChange,
+    featureTogglesLocked,
 }: Props) {
     const {t} = useTranslation();
 
@@ -218,6 +225,9 @@ export function DesktopSidebar({
                             onWindowChange={onWindowChange}
                             journalSessionCount={journalSessionCount}
                             onClearAllJournal={onClearAllJournal}
+                            featureToggles={featureToggles}
+                            onFeatureTogglesChange={onFeatureTogglesChange}
+                            featureTogglesLocked={featureTogglesLocked}
                         />
                     )}
                 </div>
@@ -225,6 +235,7 @@ export function DesktopSidebar({
             <Rail
                 panel={panel}
                 onPanelChange={onPanelChange}
+                featureToggles={featureToggles}
             />
         </aside>
     );
@@ -258,9 +269,11 @@ function PanelHeader({
 function Rail({
     panel,
     onPanelChange,
+    featureToggles,
 }: {
     panel: DesktopPanel;
     onPanelChange: (panel: DesktopPanel) => void;
+    featureToggles: FeatureToggles;
 }) {
     const {t} = useTranslation();
     const {localePath} = useLocale();
@@ -273,24 +286,30 @@ function Rail({
                 onClick={() => onPanelChange(panel === "range" ? null : "range")}
                 icon={<SlidersHorizontalIcon className="size-5"/>}
             />
-            <RailButton
-                label={t("sidebar.sets")}
-                active={panel === "sets"}
-                onClick={() => onPanelChange(panel === "sets" ? null : "sets")}
-                icon={<CaseSensitiveIcon className="size-5"/>}
-            />
-            <RailButton
-                label={t("sidebar.journal")}
-                active={panel === "journal"}
-                onClick={() => onPanelChange(panel === "journal" ? null : "journal")}
-                icon={<BookMarkedIcon className="size-5"/>}
-            />
-            <RailButton
-                label={t("sidebar.reading")}
-                active={panel === "reading"}
-                onClick={() => onPanelChange(panel === "reading" ? null : "reading")}
-                icon={<BookOpenTextIcon className="size-5"/>}
-            />
+            {featureToggles.prompts ? (
+                <RailButton
+                    label={t("sidebar.sets")}
+                    active={panel === "sets"}
+                    onClick={() => onPanelChange(panel === "sets" ? null : "sets")}
+                    icon={<CaseSensitiveIcon className="size-5"/>}
+                />
+            ) : null}
+            {featureToggles.journal ? (
+                <RailButton
+                    label={t("sidebar.journal")}
+                    active={panel === "journal"}
+                    onClick={() => onPanelChange(panel === "journal" ? null : "journal")}
+                    icon={<BookMarkedIcon className="size-5"/>}
+                />
+            ) : null}
+            {featureToggles.reading ? (
+                <RailButton
+                    label={t("sidebar.reading")}
+                    active={panel === "reading"}
+                    onClick={() => onPanelChange(panel === "reading" ? null : "reading")}
+                    icon={<BookOpenTextIcon className="size-5"/>}
+                />
+            ) : null}
             <div className="mt-auto flex flex-col items-center gap-2">
                 <RailLink
                     label="GitHub"
@@ -471,31 +490,10 @@ function RangePanel({
     );
 }
 
-function SettingsPanel({
-    detectorAlgorithm,
-    onDetectorChange,
-    timelineWindowSeconds,
-    onWindowChange,
-    journalSessionCount,
-    onClearAllJournal,
-}: {
-    detectorAlgorithm: DetectorAlgorithm;
-    onDetectorChange: (value: DetectorAlgorithm) => void;
-    timelineWindowSeconds: number;
-    onWindowChange: (value: number) => void;
-    journalSessionCount: number;
-    onClearAllJournal: () => void;
-}) {
+function SettingsPanel(props: AdvancedSettingsPanelProps) {
     return (
         <div className="min-h-0 flex-1 overflow-y-auto">
-            <AdvancedSettingsPanel
-                detectorAlgorithm={detectorAlgorithm}
-                onDetectorChange={onDetectorChange}
-                timelineWindowSeconds={timelineWindowSeconds}
-                onWindowChange={onWindowChange}
-                journalSessionCount={journalSessionCount}
-                onClearAllJournal={onClearAllJournal}
-            />
+            <AdvancedSettingsPanel {...props}/>
         </div>
     );
 }

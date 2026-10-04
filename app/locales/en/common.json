@@ -152,7 +152,23 @@
     "restartTour": "Restart welcome tour",
     "clearData": "Clear data",
     "clearDataAction": "Clear",
-    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)"
+    "rangeWithHz": "{{label}} ({{minHz}}-{{maxHz}} Hz)",
+    "features": {
+      "title": "Features",
+      "locked": "Finish the current recording to change features.",
+      "journal": {
+        "label": "Journal",
+        "hint": "Off: Journal is hidden and takes cannot be saved."
+      },
+      "reading": {
+        "label": "Reading mode",
+        "hint": "Off: disables reading mode."
+      },
+      "prompts": {
+        "label": "Prompts",
+        "hint": "Off: hides prompts and sets in Detail mode."
+      }
+    }
   },
   "ranges": {
     "title": "Selected range",
